@@ -30,7 +30,7 @@
         android:id="@+id/textView2"
         android:layout_width="155dp"
         android:layout_height="26dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="20dp"
         android:text="Isa Yannik"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
