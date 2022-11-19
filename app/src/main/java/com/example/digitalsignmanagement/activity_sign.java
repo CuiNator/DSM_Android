@@ -1,13 +1,18 @@
 package com.example.digitalsignmanagement;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Random;
 
 import me.panavtec.drawableview.DrawableView;
@@ -79,10 +84,24 @@ public class activity_sign extends AppCompatActivity {
         color.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // initialise Random
-                Random random = new Random();
-                // set the color using random
-                config.setStrokeColor(Color.rgb(255, random.nextInt(256), random.nextInt(256)));
+                View content = drawableView;
+                content.setDrawingCacheEnabled(true);
+                content.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+                Bitmap bitmap = content.getDrawingCache();
+                String path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                File file = new File("sdcard/Pictures/image.png");
+                FileOutputStream ostream;
+                try {
+                    file.createNewFile();
+                    ostream = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
+                    ostream.flush();
+                    ostream.close();
+                    Toast.makeText(getApplicationContext(), "image saved", 5000).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "error", 5000).show();
+                }
             }
         });
         undo.setOnClickListener(new View.OnClickListener() {

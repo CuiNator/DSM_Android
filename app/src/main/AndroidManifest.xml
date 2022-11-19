@@ -23,20 +23,30 @@
         </activity>
         <activity
             android:name=".ui.login.LoginActivity"
-            android:exported="false"
-            android:label="@string/title_activity_login" />
+            android:exported="true"
+            android:label="@string/title_activity_login">
+
+        </activity>
+
+
+
+        <meta-data
+            android:name="android.app.lib_name"
+            android:value="" />
         <activity
             android:name=".activity_sign"
             android:exported="true"
             android:screenOrientation="landscape">
 
-            <!-- Erzwungene orientierung im Landscape-Modus -->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+
+            <!-- Erzwungene orientierung im Landscape-Modus -->
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
