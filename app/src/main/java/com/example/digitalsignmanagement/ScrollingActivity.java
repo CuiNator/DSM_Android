@@ -1,7 +1,10 @@
 package com.example.digitalsignmanagement;
 
-import android.content.DialogInterface;
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import com.example.digitalsignmanagement.unterschriften.Sign;
 import com.example.digitalsignmanagement.unterschriften.SignAdapter;
@@ -44,6 +47,20 @@ public class ScrollingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
         toolBarLayout.setTitle(getTitle());
+
+        SignAdapter mAdapter = new SignAdapter(signs);
+
+        mAdapter.setOnItemClickListener(new SignAdapter.ClickListener() {
+            @Override
+            public void onItemLongClick(int position, View v) {
+                Log.d(TAG, "onItemLongClick pos = " + position);
+            }
+
+            @Override
+            public void onItemClick(int position, View v) {
+                Log.d(TAG, "onItemClick position: " + position);
+            }
+        });
     }
 
 
