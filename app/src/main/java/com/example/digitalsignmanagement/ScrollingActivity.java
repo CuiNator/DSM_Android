@@ -2,10 +2,13 @@ package com.example.digitalsignmanagement;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.digitalsignmanagement.ui.login.LoginActivity;
 import com.example.digitalsignmanagement.unterschriften.Sign;
 import com.example.digitalsignmanagement.unterschriften.SignAdapter;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -47,20 +50,23 @@ public class ScrollingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
         toolBarLayout.setTitle(getTitle());
+        Context context = getBaseContext();
 
         SignAdapter mAdapter = new SignAdapter(signs);
 
-        mAdapter.setOnItemClickListener(new SignAdapter.ClickListener() {
-            @Override
-            public void onItemLongClick(int position, View v) {
-                Log.d(TAG, "onItemLongClick pos = " + position);
-            }
+        RecyclerView recyclerView = findViewById(R.id.unterschrifen);
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(context, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Intent intent1 = new Intent(ScrollingActivity.this, activity_sign.class);
+                        startActivity(intent1);
+                    }
 
-            @Override
-            public void onItemClick(int position, View v) {
-                Log.d(TAG, "onItemClick position: " + position);
-            }
-        });
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
     }
 
 
