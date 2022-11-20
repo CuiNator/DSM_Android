@@ -35,10 +35,12 @@
         <meta-data
             android:name="android.app.lib_name"
             android:value="" />
+
         <activity
             android:name=".activity_sign"
             android:exported="true"
             android:screenOrientation="landscape">
+
             <!-- Erzwungene orientierung im Landscape-Modus -->
             <meta-data
                 android:name="android.app.lib_name"

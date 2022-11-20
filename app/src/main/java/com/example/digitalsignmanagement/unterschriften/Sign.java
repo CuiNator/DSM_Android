@@ -2,7 +2,7 @@ package com.example.digitalsignmanagement.unterschriften;
 
 import java.util.ArrayList;
 
-public class Unterschriften {
+public class Sign {
 
 
     private String name;
@@ -10,7 +10,7 @@ public class Unterschriften {
     private String ersteller;
     private boolean unterschrieben;
 
-    public Unterschriften(String name, String datum, String ersteller, boolean unterschrieben) {
+    public Sign(String name, String datum, String ersteller, boolean unterschrieben) {
         this.name = name;
         this.datum = datum;
         this.ersteller = ersteller;
@@ -49,12 +49,5 @@ public class Unterschriften {
         this.unterschrieben = unterschrieben;
     }
 
-    private ArrayList<Unterschriften> initUnterschriften(){
-        ArrayList<Unterschriften> list = new ArrayList<>();
-        list.add(new Unterschriften("Urlaubsantrag","20.11.22","Yanik",false));
-        list.add(new Unterschriften("Urlaubsantrag","20.11.22","Yanik",true));
-        list.add(new Unterschriften("Urlaubsantrag","20.11.22","Yanik",false));
-        list.add(new Unterschriften("Urlaubsantrag","20.11.22","Yanik",true));
-        return list;
-    }
+
 }
