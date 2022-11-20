@@ -1,7 +1,6 @@
 package com.example.digitalsignmanagement;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
@@ -13,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Random;
 
 import me.panavtec.drawableview.DrawableView;
 import me.panavtec.drawableview.DrawableViewConfig;
@@ -30,11 +28,11 @@ public class activity_sign extends AppCompatActivity {
         setContentView(R.layout.activity_sign);
 
         // initialise the value
-        initiaselayout();
+        initializelayout();
 
     }
 
-    private void initiaselayout() {
+    private void initializelayout() {
 
         // initialise the layout
         drawableView = findViewById(R.id.paintView);
@@ -97,10 +95,10 @@ public class activity_sign extends AppCompatActivity {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
                     ostream.flush();
                     ostream.close();
-                    Toast.makeText(getApplicationContext(), "image saved", 5000).show();
+                    Toast.makeText(getApplicationContext(), "image saved", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "error", 5000).show();
+                    Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
                 }
             }
         });

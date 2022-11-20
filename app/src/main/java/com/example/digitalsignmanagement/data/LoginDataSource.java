@@ -1,5 +1,7 @@
 package com.example.digitalsignmanagement.data;
 
+import android.widget.Toast;
+
 import com.example.digitalsignmanagement.data.model.LoggedInUser;
 
 import java.io.IOException;
@@ -10,14 +12,22 @@ import java.io.IOException;
 public class LoginDataSource {
 
     public Result<LoggedInUser> login(String username, String password) {
-
+        String DummyUsername ="Alex";
+        String DummyPassword ="test123";
         try {
-            // TODO: handle loggedInUser authentication
-            LoggedInUser fakeUser =
-                    new LoggedInUser(
-                            java.util.UUID.randomUUID().toString(),
-                            "Jane Doe");
-            return new Result.Success<>(fakeUser);
+            if (username == DummyUsername && password == DummyPassword) {
+                // TODO: handle loggedInUser authentication
+                LoggedInUser fakeUser =
+                        new LoggedInUser(
+                                java.util.UUID.randomUUID().toString(),
+                                "Jane Doe");
+                return new Result.Success<>(fakeUser);
+
+            }else{
+                return new Result.Error(new IOException("Error logging in", null));
+
+                }
+
         } catch (Exception e) {
             return new Result.Error(new IOException("Error logging in", e));
         }
