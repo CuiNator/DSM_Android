@@ -1,5 +1,6 @@
 package com.example.digitalsignmanagement;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.example.digitalsignmanagement.unterschriften.Sign;
@@ -43,9 +44,8 @@ public class ScrollingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
         toolBarLayout.setTitle(getTitle());
-
-
     }
+
 
 
     private ArrayList<Sign> initSigns() {
