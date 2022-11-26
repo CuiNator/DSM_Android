@@ -23,6 +23,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
 import com.example.digitalsignmanagement.ScrollingActivity;
 import com.example.digitalsignmanagement.ui.login.LoginViewModel;
@@ -43,6 +51,57 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
+
+        final TextView textView = (TextView) findViewById(R.id.textView);
+// ...
+
+// Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = Helper.getConfigValue(this,"api_url");
+
+// Request a string response from the provided URL.
+        System.out.println("Hier");
+
+        /*JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try{
+                    JSONObject cityInfo = response.getJSONObject(0);
+                    String cityID = cityInfo.getString("woeID");
+                }
+                catch(JSONException e){
+                    e.printStackTrace();
+                }
+                Toast.makeText(getApplicationContext(), "Yes", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Brrrrr", Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+            }
+        });*/
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        textView.setText("Response is: " + response.substring(0));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                textView.setText("That didn't work!");
+                error.printStackTrace();
+            }
+        });
+
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;

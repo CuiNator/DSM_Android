@@ -36,6 +36,8 @@ public class ScrollingActivity extends AppCompatActivity {
         binding = ActivityScrollingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //AndroidNetworking.initialize(getApplicationContext());
+
         ArrayList<Sign> signs = initSigns();
 
         this.sign = (RecyclerView)findViewById(R.id.unterschrifen);
@@ -73,7 +75,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
     private ArrayList<Sign> initSigns() {
         ArrayList<Sign> list = new ArrayList<>();
-        list.add(new Sign("Urlaubsantrag", "20.11.22", "Yanikaa", false));
+        list.add(new Sign("Urlaubsantrag", "20.11.22", "Yanik", false));
         list.add(new Sign("Urlaubsantrag", "20.11.22", "Yanik1", true));
         list.add(new Sign("Urlaubsantrag", "20.11.22", "Yanik2", false));
         list.add(new Sign("Urlaubsantrag", "20.11.22", "Yanik3", true));
