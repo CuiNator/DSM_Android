@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -52,8 +53,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
+    String strSavedMem;
+
     List<Sign> unterschriften = new ArrayList<Sign>();
     @Override
+
+
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -64,6 +70,16 @@ public class LoginActivity extends AppCompatActivity {
                 .get(LoginViewModel.class);
 
         final TextView textView = (TextView) findViewById(R.id.link);
+        final EditText usernameEditText = binding.username;
+        final EditText passwordEditText = binding.password;
+        final Button loginButton = binding.login;
+        final ProgressBar loadingProgressBar = binding.loading;
+        final Button config = binding.config;
+        final Button ok = binding.Ok;
+        final TextView connection = binding.link;
+
+        loadPreferences();
+        connection.setText(strSavedMem);
 
 
 // Request a string response from the provided URL.
@@ -71,7 +87,8 @@ public class LoginActivity extends AppCompatActivity {
 
         long id = 1;
         RequestQueue queue = Volley.newRequestQueue(this);
-        String api = Helper.getConfigValue(this, "api_url");
+        String api = strSavedMem;
+        //String api = Helper.getConfigValue(this, "api_url");
         String url = api+"/"+id;
         System.out.println(url);
 
@@ -81,16 +98,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 JSONObject personInfo = null;
-                try {
-                    personInfo = response.getJSONObject(String.valueOf(1));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    String personID = personInfo.getString("personID");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                System.out.println(response);
 
                 Toast.makeText(getApplicationContext(), "Yes"+personInfo, Toast.LENGTH_SHORT).show();
             }
@@ -105,15 +113,10 @@ public class LoginActivity extends AppCompatActivity {
                 });
         queue.add(request);
 
-        final EditText usernameEditText = binding.username;
-        final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.login;
-        final ProgressBar loadingProgressBar = binding.loading;
-        final Button config = binding.config;
-        final TextView connection = binding.link;
-        final Button ok = binding.Ok;
 
-        connection.setText(Helper.getConfigValue(this,"api_url"));
+
+
+        //connection.setText(Helper.getConfigValue(this,"api_url"));
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -214,18 +217,24 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                try {
-                    Helper.setConfigValue(connection.toString());
-                } catch (ConfigurationException e) {
-                    e.printStackTrace();
-                }
+                SavePreferences("url", connection.getText().toString());
                 connection.setVisibility(View.INVISIBLE);
                 ok.setVisibility(View.INVISIBLE);
+
+
             }
+
+
         });
-
-
     }
+
+    private void SavePreferences(String url, String value) {
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(url, value);
+        editor.commit();
+    }
+
 
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
@@ -235,5 +244,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadPreferences(){
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        if (sharedPreferences.getString("url", "") == "")
+        {
+                strSavedMem = "http://10.0.2.2:8080/person";
+        }
+        else{
+        strSavedMem = sharedPreferences.getString("url", "");
+        }
     }
 }
