@@ -28,6 +28,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.Helper;
@@ -52,61 +53,57 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final TextView textView = (TextView) findViewById(R.id.textView);
-// ...
+        final TextView textView = (TextView) findViewById(R.id.link);
 
-// Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = Helper.getConfigValue(this,"api_url");
 
 // Request a string response from the provided URL.
         System.out.println("Hier");
 
-        /*JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+        long id = 1;
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String api = Helper.getConfigValue(this, "api_url");
+        String url = api+"/"+id;
+        System.out.println(url);
+
+        System.out.println("Hier");
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONArray response) {
-                try{
-                    JSONObject cityInfo = response.getJSONObject(0);
-                    String cityID = cityInfo.getString("woeID");
-                }
-                catch(JSONException e){
+            public void onResponse(JSONObject response) {
+                JSONObject personInfo = null;
+                try {
+                    personInfo = response.getJSONObject(String.valueOf(1));
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(getApplicationContext(), "Yes", Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Brrrrr", Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        });*/
+                try {
+                    String personID = personInfo.getString("personID");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+                Toast.makeText(getApplicationContext(), "Yes"+personInfo, Toast.LENGTH_SHORT).show();
+            }
+        },
+                new Response.ErrorListener(){
                     @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        textView.setText("Response is: " + response.substring(0));
+                    public void onErrorResponse(VolleyError error){
+                        error.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                textView.setText("That didn't work!");
-                error.printStackTrace();
-            }
-        });
 
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
-
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
+                });
+        queue.add(request);
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
+        final Button config = binding.config;
+        final TextView connection = binding.link;
+        final Button ok = binding.Ok;
+
+        connection.setText(Helper.getConfigValue(this,"api_url"));
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -185,6 +182,39 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent1);
             }
         });
+
+        config.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            if (connection.getVisibility() == View.INVISIBLE) {
+                connection.setVisibility(View.VISIBLE);
+                ok.setVisibility(View.VISIBLE);
+            }
+
+            else
+                {
+                    connection.setVisibility(View.INVISIBLE);
+                    ok.setVisibility(View.INVISIBLE);
+                }
+
+            }
+        });
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    Helper.setConfigValue(connection.toString());
+                } catch (ConfigurationException e) {
+                    e.printStackTrace();
+                }
+                connection.setVisibility(View.INVISIBLE);
+                ok.setVisibility(View.INVISIBLE);
+            }
+        });
+
+
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
