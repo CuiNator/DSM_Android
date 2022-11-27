@@ -37,12 +37,22 @@ import com.example.digitalsignmanagement.ScrollingActivity;
 import com.example.digitalsignmanagement.ui.login.LoginViewModel;
 import com.example.digitalsignmanagement.ui.login.LoginViewModelFactory;
 import com.example.digitalsignmanagement.databinding.ActivityLoginBinding;
+import com.example.digitalsignmanagement.unterschriften.Sign;
+
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
-
+    List<Sign> unterschriften = new ArrayList<Sign>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
