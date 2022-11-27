@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject personInfo = null;
                 System.out.println(response);
 
-                Toast.makeText(getApplicationContext(), "Yes"+personInfo, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Yes"+response.toString(), Toast.LENGTH_LONG).show();
             }
         },
                 new Response.ErrorListener(){
