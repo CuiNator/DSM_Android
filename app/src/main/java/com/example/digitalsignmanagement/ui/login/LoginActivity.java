@@ -1,21 +1,16 @@
 package com.example.digitalsignmanagement.ui.login;
 
 import android.app.Activity;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -24,28 +19,25 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
 import com.example.digitalsignmanagement.ScrollingActivity;
-import com.example.digitalsignmanagement.ui.login.LoginViewModel;
-import com.example.digitalsignmanagement.ui.login.LoginViewModelFactory;
 import com.example.digitalsignmanagement.databinding.ActivityLoginBinding;
 import com.example.digitalsignmanagement.unterschriften.Sign;
 
-import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,8 +48,8 @@ public class LoginActivity extends AppCompatActivity {
     String strSavedMem;
 
     List<Sign> unterschriften = new ArrayList<Sign>();
-    @Override
 
+    @Override
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         String api = strSavedMem;
         //String api = Helper.getConfigValue(this, "api_url");
-        String url = api+"/"+id;
+        String url = api + "/" + id;
         System.out.println(url);
 
         System.out.println("Hier");
@@ -100,20 +92,18 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject personInfo = null;
                 System.out.println(response);
 
-                Toast.makeText(getApplicationContext(), "Yes"+response.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
             }
         },
-                new Response.ErrorListener(){
+                new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error){
+                    public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
                     }
 
                 });
         queue.add(request);
-
-
 
 
         //connection.setText(Helper.getConfigValue(this,"api_url"));
@@ -199,13 +189,10 @@ public class LoginActivity extends AppCompatActivity {
         config.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if (connection.getVisibility() == View.INVISIBLE) {
-                connection.setVisibility(View.VISIBLE);
-                ok.setVisibility(View.VISIBLE);
-            }
-
-            else
-                {
+                if (connection.getVisibility() == View.INVISIBLE) {
+                    connection.setVisibility(View.VISIBLE);
+                    ok.setVisibility(View.VISIBLE);
+                } else {
                     connection.setVisibility(View.INVISIBLE);
                     ok.setVisibility(View.INVISIBLE);
                 }
@@ -246,14 +233,28 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    private void loadPreferences(){
+    private void loadPreferences() {
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        if (sharedPreferences.getString("url", "") == "")
-        {
-                strSavedMem = "http://10.0.2.2:8080/person";
+        if (sharedPreferences.getString("url", "") == "") {
+            strSavedMem = "http://10.0.2.2:8080/person";
+        } else {
+            strSavedMem = sharedPreferences.getString("url", "");
         }
-        else{
-        strSavedMem = sharedPreferences.getString("url", "");
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_url, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Toast.makeText(this, "Selected Item: " +item.getTitle(), Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()) {
+            case R.id.url:
+                // do something
+                return true;
+            default:
+                return super.onContextItemSelected(item);
         }
     }
 }
