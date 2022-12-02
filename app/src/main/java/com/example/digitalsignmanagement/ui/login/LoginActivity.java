@@ -1,15 +1,16 @@
 package com.example.digitalsignmanagement.ui.login;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -45,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
-    String strSavedMem;
-
+    String preferenceURL;
+    String savedInput;
     List<Sign> unterschriften = new ArrayList<Sign>();
 
     @Override
@@ -71,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         final TextView connection = binding.link;
 
         loadPreferences();
-        connection.setText(strSavedMem);
+        connection.setText(preferenceURL);
 
 
 // Request a string response from the provided URL.
@@ -79,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
         long id = 1;
         RequestQueue queue = Volley.newRequestQueue(this);
-        String api = strSavedMem;
+        String api = preferenceURL;
         //String api = Helper.getConfigValue(this, "api_url");
         String url = api + "/" + id;
         System.out.println(url);
@@ -185,34 +186,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent1);
             }
         });
-
-        config.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (connection.getVisibility() == View.INVISIBLE) {
-                    connection.setVisibility(View.VISIBLE);
-                    ok.setVisibility(View.VISIBLE);
-                } else {
-                    connection.setVisibility(View.INVISIBLE);
-                    ok.setVisibility(View.INVISIBLE);
-                }
-
-            }
-        });
-
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                SavePreferences("url", connection.getText().toString());
-                connection.setVisibility(View.INVISIBLE);
-                ok.setVisibility(View.INVISIBLE);
-
-
-            }
-
-
-        });
     }
 
     private void SavePreferences(String url, String value) {
@@ -236,9 +209,9 @@ public class LoginActivity extends AppCompatActivity {
     private void loadPreferences() {
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         if (sharedPreferences.getString("url", "") == "") {
-            strSavedMem = "http://10.0.2.2:8080/person";
+            preferenceURL = "http://10.0.2.2:8080/person";
         } else {
-            strSavedMem = sharedPreferences.getString("url", "");
+            preferenceURL = sharedPreferences.getString("url", "");
         }
     }
     @Override
@@ -251,7 +224,35 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(this, "Selected Item: " +item.getTitle(), Toast.LENGTH_SHORT).show();
         switch (item.getItemId()) {
             case R.id.url:
-                // do something
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("URL Einrichten");
+
+// Set up the input
+                final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+                input.setText(preferenceURL);
+                builder.setView(input);
+
+// Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        System.out.println("Hier?");
+                        savedInput = input.getText().toString();
+                        System.out.println(savedInput);
+                        SavePreferences("url", savedInput);
+                        System.out.println("Hier!");
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
                 return true;
             default:
                 return super.onContextItemSelected(item);
