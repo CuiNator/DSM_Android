@@ -1,6 +1,7 @@
 package com.example.digitalsignmanagement;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.util.Log;
 
@@ -16,44 +17,20 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public final class Helper {
-    private static final String TAG = "Helper";
 
-    public static String getConfigValue(Context context, String name) {
-        Resources resources = context.getResources();
+    private static final String url = null;
 
-        try {
-            InputStream rawResource = resources.openRawResource(R.raw.config);
-            Properties properties = new Properties();
-            properties.load(rawResource);
-            return properties.getProperty(name);
-        } catch (Resources.NotFoundException e) {
-            Log.e(TAG, "Unable to find the config file: " + e.getMessage());
-        } catch (IOException e) {
-            Log.e(TAG, "Failed to open config file.");
-        }
-
-        return null;
+    public static SharedPreferences getPrefs(Context context){
+        return  context.getSharedPreferences(url,Context.MODE_PRIVATE);
     }
 
-    public static String setConfigValue(String url) throws ConfigurationException {
-
-        Configurations configs = new Configurations();
-
-        // obtain the configuration
-        FileBasedConfigurationBuilder<PropertiesConfiguration> builder = configs.propertiesBuilder("config.properties");
-        PropertiesConfiguration config = builder.getConfiguration();
-
-        // update property
-        config.addProperty("url", url);
-
-        // save configuration
-        builder.save();
-
-
-
-        return null;
+    public static void insertData(Context context,String key,String value){
+        SharedPreferences.Editor editor=getPrefs(context).edit();
+        editor.putString(key,value);
+        editor.commit();
     }
 
-
-
+    public static String retriveData(Context context,String key){
+        return getPrefs(context).getString(key,"no_data_found");
     }
+}

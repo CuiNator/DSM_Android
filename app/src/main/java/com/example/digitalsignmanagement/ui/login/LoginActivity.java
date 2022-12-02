@@ -59,21 +59,17 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final TextView textView = (TextView) findViewById(R.id.link);
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
-        final Button config = binding.config;
-        final Button ok = binding.Ok;
-        final TextView connection = binding.link;
-
         loadPreferences();
-        connection.setText(preferenceURL);
-
+        usernameEditText.setText("Username");
+        passwordEditText.setText("Password");
 
 // Request a string response from the provided URL.
         System.out.println("Hier");
@@ -82,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         String api = preferenceURL;
         //String api = Helper.getConfigValue(this, "api_url");
-        String url = api + "/" + id;
+        String url = api + "/person/" + id;
         System.out.println(url);
 
         System.out.println("Hier");
@@ -189,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void SavePreferences(String url, String value) {
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyKey",MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(url, value);
         editor.commit();
@@ -206,10 +202,11 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    private void loadPreferences() {
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+    public void loadPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyKey",MODE_PRIVATE);
+
         if (sharedPreferences.getString("url", "") == "") {
-            preferenceURL = "http://10.0.2.2:8080/person";
+            preferenceURL = "http://10.0.2.2:8080";
         } else {
             preferenceURL = sharedPreferences.getString("url", "");
         }
