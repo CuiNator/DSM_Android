@@ -21,10 +21,12 @@ import com.example.digitalsignmanagement.ui.login.LoginActivity;
 import com.example.digitalsignmanagement.unterschriften.JacksonRequest;
 import com.example.digitalsignmanagement.unterschriften.Sign;
 import com.example.digitalsignmanagement.unterschriften.SignAdapter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +34,8 @@ import com.example.digitalsignmanagement.databinding.ActivityScrollingBinding;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class ScrollingActivity extends AppCompatActivity {
@@ -64,6 +68,8 @@ public class ScrollingActivity extends AppCompatActivity {
         adapter = new SignAdapter(signs);
         this.sign.setAdapter(adapter);
 
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);
+        this.sign.addItemDecoration(itemDecoration);
 
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
@@ -107,6 +113,14 @@ public class ScrollingActivity extends AppCompatActivity {
 //                });
 //        queue.add(request);
 
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Sign sign = mapper.readValue(url, Sign.class);
+            System.out.println(sign);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url+"/1", null, new Response.Listener<JSONObject>() {
             @Override
