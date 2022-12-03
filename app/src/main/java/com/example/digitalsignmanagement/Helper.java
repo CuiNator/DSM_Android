@@ -31,6 +31,12 @@ public final class Helper {
     }
 
     public static String retriveData(Context context,String key){
-        return getPrefs(context).getString(key,"no_data_found");
+
+        String data = getPrefs(context).getString(key,"no_data_found");
+        if (data == "no_data_found"){
+            data = "http://10.0.2.2:8080";
+            return data;
+        }
+        return data;
     }
 }

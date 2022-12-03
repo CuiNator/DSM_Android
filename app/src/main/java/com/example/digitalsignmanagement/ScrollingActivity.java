@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -45,7 +46,8 @@ public class ScrollingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loadPreferences();
+        preferenceURL = Helper.retriveData(this,"url");
+        //loadPreferences();
         binding = ActivityScrollingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -83,14 +85,30 @@ public class ScrollingActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         //String api = Helper.getConfigValue(this, "api_url");
-        System.out.println("Hierrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
         System.out.println(url);
 
 
+//        JacksonRequest request = new JacksonRequest(Request.Method.GET, url,Sign , new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                JSONObject personInfo = null;
+//                System.out.println(response);
+//
+//                Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
+//            }
+//        },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        error.printStackTrace();
+//                        Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                });
+//        queue.add(request);
 
-        System.out.println("Hier");
 
-        JacksonRequest<Sign> request = new JacksonRequest(Request.Method.GET, url,null , new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url+"/1", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 JSONObject personInfo = null;
@@ -135,7 +153,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
     private void loadPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("MyKey",MODE_PRIVATE);
-
+        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 //        if (sharedPreferences.getString("url", "") == "") {
 //            preferenceURL = "http://10.0.2.2:8080/person";
 //        } else {

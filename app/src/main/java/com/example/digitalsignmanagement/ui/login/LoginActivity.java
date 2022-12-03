@@ -32,6 +32,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
 import com.example.digitalsignmanagement.ScrollingActivity;
 import com.example.digitalsignmanagement.databinding.ActivityLoginBinding;
@@ -67,7 +68,8 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
-        loadPreferences();
+        preferenceURL=Helper.retriveData(this,"url");
+        //loadPreferences();
         usernameEditText.setText("Username");
         passwordEditText.setText("Password");
 
@@ -202,15 +204,15 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    public void loadPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyKey",MODE_PRIVATE);
-
-        if (sharedPreferences.getString("url", "") == "") {
-            preferenceURL = "http://10.0.2.2:8080";
-        } else {
-            preferenceURL = sharedPreferences.getString("url", "");
-        }
-    }
+//    public void loadPreferences() {
+//        SharedPreferences sharedPreferences = getSharedPreferences("MyKey",MODE_PRIVATE);
+//
+//        if (sharedPreferences.getString("url", "") == "") {
+//            preferenceURL = "http://10.0.2.2:8080";
+//        } else {
+//            preferenceURL = sharedPreferences.getString("url", "");
+//        }
+//    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_url, menu);
@@ -238,7 +240,8 @@ public class LoginActivity extends AppCompatActivity {
                         System.out.println("Hier?");
                         savedInput = input.getText().toString();
                         System.out.println(savedInput);
-                        SavePreferences("url", savedInput);
+                        Helper.insertData(LoginActivity.this,"url",savedInput);
+                        //SavePreferences("url", savedInput);
                         System.out.println("Hier!");
                     }
                 });
