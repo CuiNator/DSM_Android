@@ -59,7 +59,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         ArrayList<Sign> signs = initSigns();
         System.out.println(preferenceURL);
-        String url = preferenceURL+ "/document";
+        String url = preferenceURL+ "/person";
 
         this.sign = (RecyclerView)findViewById(R.id.unterschrifen);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -116,7 +116,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            Sign sign = mapper.readValue(url, Sign.class);
+            Sign sign = mapper.readValue(new URL(url), Sign.class);
             System.out.println(sign);
         } catch (IOException e) {
             e.printStackTrace();
