@@ -181,6 +181,36 @@ public class LoginActivity extends AppCompatActivity {
                 // loadingProgressBar.setVisibility(View.VISIBLE);
                 // loginViewModel.login(usernameEditText.getText().toString(),
                 //        passwordEditText.getText().toString());
+                String username = eMailEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+
+                //Call<ResponseBody>
+
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject("{\"username\":"+ username +",\"password\":"+password+"}");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(jsonObject.toString());
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONObject personInfo = null;
+                        System.out.println(response);
+
+                        Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
+                    }
+                },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                error.printStackTrace();
+                                Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
+                            }
+
+                        });
+                queue.add(request);
                 Intent intent1 = new Intent(LoginActivity.this, ScrollingActivity.class);
                 startActivity(intent1);
             }
