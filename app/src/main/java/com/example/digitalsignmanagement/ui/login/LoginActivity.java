@@ -38,6 +38,7 @@ import com.example.digitalsignmanagement.ScrollingActivity;
 import com.example.digitalsignmanagement.databinding.ActivityLoginBinding;
 import com.example.digitalsignmanagement.unterschriften.Sign;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
