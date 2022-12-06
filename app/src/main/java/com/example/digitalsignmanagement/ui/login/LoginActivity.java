@@ -5,10 +5,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +43,11 @@ import com.example.digitalsignmanagement.unterschriften.Sign;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,13 +72,13 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText eMailEditText = binding.username;
+        final EditText eMailEditText = binding.email;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
         preferenceURL=Helper.retriveData(this,"url");
         //loadPreferences();
-        eMailEditText.setText("Username");
+        eMailEditText.setText("email@email.de");
         passwordEditText.setText("Password");
 
 // Request a string response from the provided URL.
@@ -181,19 +188,27 @@ public class LoginActivity extends AppCompatActivity {
                 // loadingProgressBar.setVisibility(View.VISIBLE);
                 // loginViewModel.login(usernameEditText.getText().toString(),
                 //        passwordEditText.getText().toString());
-                String username = eMailEditText.getText().toString();
+                String email = eMailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
+                String loginURL = Helper.retriveData(LoginActivity.this, "url") + "/user";
 
                 //Call<ResponseBody>
 
                 JSONObject jsonObject = null;
+                JSONObject data = null;
                 try {
-                    jsonObject = new JSONObject("{\"username\":"+ username +",\"password\":"+password+"}");
+                    data = new JSONObject();
+                    data.put("email", email);
+                    data.put("password", password);
+                    //jsonObject = new JSONObject("{\"email\":"+ email +",\"password\":"+password+"}");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                System.out.println(jsonObject.toString());
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
+                System.out.println(data);
+                //new SendDeviceDetails().execute("http://10.0.2.2:8080/user/login", jsonObject.toString());
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, loginURL, data, new Response.Listener<JSONObject>() {
+                    JSONObject personInfo = null;
+
                     @Override
                     public void onResponse(JSONObject response) {
                         JSONObject personInfo = null;
@@ -211,8 +226,8 @@ public class LoginActivity extends AppCompatActivity {
 
                         });
                 queue.add(request);
-                Intent intent1 = new Intent(LoginActivity.this, ScrollingActivity.class);
-                startActivity(intent1);
+//                Intent intent1 = new Intent(LoginActivity.this, ScrollingActivity.class);
+//                startActivity(intent1);
             }
         });
     }
@@ -263,7 +278,7 @@ public class LoginActivity extends AppCompatActivity {
                         System.out.println("Hier?");
                         savedInput = input.getText().toString();
                         System.out.println(savedInput);
-                        Helper.insertData(LoginActivity.this,"url",savedInput);
+                        Helper.insertData(LoginActivity.this, "url", savedInput);
                         //SavePreferences("url", savedInput);
                         System.out.println("Hier!");
                     }
@@ -281,4 +296,52 @@ public class LoginActivity extends AppCompatActivity {
                 return super.onContextItemSelected(item);
         }
     }
-}
+        private class SendDeviceDetails extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                String data = "";
+
+                HttpURLConnection httpURLConnection = null;
+                try {
+
+                    httpURLConnection = (HttpURLConnection) new URL(params[0]).openConnection();
+                    httpURLConnection.setRequestMethod("POST");
+
+                    httpURLConnection.setDoOutput(true);
+
+                    DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
+                    wr.writeBytes("PostData=" + params[0]);
+                    wr.flush();
+                    wr.close();
+
+                    InputStream in = httpURLConnection.getInputStream();
+                    InputStreamReader inputStreamReader = new InputStreamReader(in);
+
+                    int inputStreamData = inputStreamReader.read();
+                    while (inputStreamData != -1) {
+                        char current = (char) inputStreamData;
+                        inputStreamData = inputStreamReader.read();
+                        data += current;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (httpURLConnection != null) {
+                        httpURLConnection.disconnect();
+                    }
+                }
+
+                return data;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
+            }
+        }
+    }
+
+
