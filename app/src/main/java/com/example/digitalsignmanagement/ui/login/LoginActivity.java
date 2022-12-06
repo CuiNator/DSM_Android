@@ -193,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
                 String loginURL = Helper.retriveData(LoginActivity.this, "url") + "/user";
 
                 //Call<ResponseBody>
-
+                JSONObject personInfo = null;
                 JSONObject jsonObject = null;
                 JSONObject data = null;
                 try {
@@ -211,8 +211,9 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        JSONObject personInfo = null;
+                        personInfo = response;
                         System.out.println(response);
+                        System.out.println(personInfo.toString());
 
                         Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
                     }
