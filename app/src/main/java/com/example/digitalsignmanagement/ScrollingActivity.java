@@ -61,6 +61,8 @@ public class ScrollingActivity extends AppCompatActivity {
         //loadPreferences();
         binding = ActivityScrollingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        loggedUser = findViewById(R.id.User);
+        loggedUser.setText("Current user: "+name);
 
         //AndroidNetworking.initialize(getApplicationContext());
 
