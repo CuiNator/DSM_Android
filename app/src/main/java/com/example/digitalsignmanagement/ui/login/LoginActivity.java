@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                 //        passwordEditText.getText().toString());
                 String email = eMailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                String loginURL = Helper.retriveData(LoginActivity.this, "url") + "/user";
+                String loginURL = Helper.retriveData(LoginActivity.this, "url") + "/login";
 
                 //Call<ResponseBody>
                 JSONObject personInfo = null;
@@ -216,19 +216,38 @@ public class LoginActivity extends AppCompatActivity {
                         System.out.println(personInfo.toString());
 
                         Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
+
+                        try {
+                            String name = personInfo.getString("name");
+                            String token = personInfo.getString("token");
+                            String id = personInfo.getString("id");
+                            System.out.println(name +" "+ token +" "+id);
+                            Helper.insertUserData(LoginActivity.this,name,token,id);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+
+
+                        }
+                        Intent intent1 = new Intent(LoginActivity.this, ScrollingActivity.class);
+                        startActivity(intent1);
                     }
                 },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 error.printStackTrace();
-                                Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Login Fehlgeschlagen", Toast.LENGTH_SHORT).show();
                             }
 
                         });
                 queue.add(request);
-//                Intent intent1 = new Intent(LoginActivity.this, ScrollingActivity.class);
-//                startActivity(intent1);
+//                try {
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
+//
             }
         });
     }

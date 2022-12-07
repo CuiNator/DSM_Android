@@ -39,4 +39,22 @@ public final class Helper {
         }
         return data;
     }
+    public static void insertUserData(Context context,String name,String token, String id){
+        SharedPreferences.Editor editor=getPrefs(context).edit();
+        editor.putString("name",name);
+        editor.putString("token",token);
+        editor.putString("id",id);
+        editor.commit();
+    }
+    public static String retriveName(Context context){
+        String data = getPrefs(context).getString("name","no_data_found");
+        return data;}
+
+    public static String retriveToken(Context context){
+        String data = getPrefs(context).getString("token","no_data_found");
+        return data;}
+
+    public static String retriveId(Context context){
+        String data = getPrefs(context).getString("id","no_data_found");
+        return data;}
 }

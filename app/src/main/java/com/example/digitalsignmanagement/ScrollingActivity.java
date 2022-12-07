@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -45,12 +46,18 @@ public class ScrollingActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private String preferenceURL;
     private Class Sign;
+    TextView loggedUser;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferenceURL = Helper.retriveData(this,"url");
+        String name = Helper.retriveName(this);
+        String token = Helper.retriveToken(this);
+        String id = Helper.retriveId(this);
+        System.out.println("HierInScrolling");
+        System.out.println(name + token + id);
         //loadPreferences();
         binding = ActivityScrollingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -87,7 +94,7 @@ public class ScrollingActivity extends AppCompatActivity {
         // Request a string response from the provided URL.
         System.out.println("Hier");
 
-        long id = 1;
+        //long id = 1;
         RequestQueue queue = Volley.newRequestQueue(this);
 
         //String api = Helper.getConfigValue(this, "api_url");
@@ -114,13 +121,13 @@ public class ScrollingActivity extends AppCompatActivity {
 //        queue.add(request);
 
 
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            Sign sign = mapper.readValue(new URL(url), Sign.class);
-            System.out.println(sign);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        ObjectMapper mapper = new ObjectMapper();
+//        try {
+//            Sign sign = mapper.readValue(new URL(url), Sign.class);
+//            System.out.println(sign);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url+"/1", null, new Response.Listener<JSONObject>() {
             @Override
