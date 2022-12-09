@@ -1,31 +1,11 @@
 package com.example.digitalsignmanagement;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.digitalsignmanagement.ui.login.LoginActivity;
-import com.example.digitalsignmanagement.unterschriften.JacksonRequest;
-import com.example.digitalsignmanagement.unterschriften.Sign;
-import com.example.digitalsignmanagement.unterschriften.SignAdapter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -33,20 +13,21 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.databinding.ActivityScrollingBinding;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpHeaders;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpRequest;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.HttpClient;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.methods.HttpGet;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.methods.HttpPost;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.impl.client.DefaultHttpClient;
+import com.example.digitalsignmanagement.unterschriften.Sign;
+import com.example.digitalsignmanagement.unterschriften.SignAdapter;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -128,7 +109,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         JsonArrayRequest request = new JsonArrayRequest (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray  response) {
                 JSONObject personInfo = null;
                 System.out.println("response");
                 System.out.println(response);
