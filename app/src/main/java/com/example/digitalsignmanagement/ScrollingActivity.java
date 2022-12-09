@@ -12,11 +12,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.ui.login.LoginActivity;
 import com.example.digitalsignmanagement.unterschriften.JacksonRequest;
@@ -32,12 +34,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.digitalsignmanagement.databinding.ActivityScrollingBinding;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpHeaders;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpRequest;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.HttpClient;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.methods.HttpGet;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.methods.HttpPost;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.impl.client.DefaultHttpClient;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ScrollingActivity extends AppCompatActivity {
 
@@ -52,7 +64,7 @@ public class ScrollingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferenceURL = Helper.retriveData(this,"url");
+        preferenceURL = Helper.retriveData(this, "url");
         String name = Helper.retriveName(this);
         String token = Helper.retriveToken(this);
         String id = Helper.retriveId(this);
@@ -62,15 +74,15 @@ public class ScrollingActivity extends AppCompatActivity {
         binding = ActivityScrollingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         loggedUser = findViewById(R.id.User);
-        loggedUser.setText("Current user: "+name);
+        loggedUser.setText("Current user: " + name);
 
         //AndroidNetworking.initialize(getApplicationContext());
 
         ArrayList<Sign> signs = initSigns();
         System.out.println(preferenceURL);
-        String url = preferenceURL+ "/person";
+        String url = preferenceURL + "/document";
 
-        this.sign = (RecyclerView)findViewById(R.id.unterschrifen);
+        this.sign = (RecyclerView) findViewById(R.id.unterschrifen);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         this.sign.setLayoutManager(mLayoutManager);
 
@@ -100,10 +112,8 @@ public class ScrollingActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         //String api = Helper.getConfigValue(this, "api_url");
-        System.out.println(url);
 
-
-//        JacksonRequest request = new JacksonRequest(Request.Method.GET, url,Sign , new Response.Listener<JSONObject>() {
+//        JacksonRequest request = new JacksonRequest(Request.Method.GET, url, Sign, new Response.Listener<JSONObject>() {
 //            @Override
 //            public void onResponse(JSONObject response) {
 //                JSONObject personInfo = null;
@@ -119,8 +129,10 @@ public class ScrollingActivity extends AppCompatActivity {
 //                        Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
 //                    }
 //
+//
 //                });
 //        queue.add(request);
+
 
 
 //        ObjectMapper mapper = new ObjectMapper();
@@ -131,23 +143,37 @@ public class ScrollingActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url+"/1", null, new Response.Listener<JSONObject>() {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 JSONObject personInfo = null;
+                System.out.println("response");
                 System.out.println(response);
 
                 Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
+
             }
         },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
+                        System.out.println(error.toString());
                         Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
                     }
 
-                });
+                })
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                //headers.put("Content-Type", "application/json");
+                headers.put("Authorization","Bearer "+ token);
+                System.out.println(headers.toString());
+                return headers;
+        }
+        };
         queue.add(request);
 
         recyclerView.addOnItemTouchListener(
@@ -184,4 +210,37 @@ public class ScrollingActivity extends AppCompatActivity {
         }
 
 
+    public void requestWithSomeHttpHeaders() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://www.somewebsite.com";
+        StringRequest getRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        Log.d("ERROR","error => "+error.toString());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("User-Agent", "Nintendo Gameboy");
+                params.put("Accept-Language", "fr");
+
+                return params;
+            }
+        };
+        queue.add(getRequest);
+
     }
+}

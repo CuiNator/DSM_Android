@@ -81,37 +81,36 @@ public class LoginActivity extends AppCompatActivity {
         eMailEditText.setText("email@email.de");
         passwordEditText.setText("Password");
 
-// Request a string response from the provided URL.
-        System.out.println("Hier");
-
-        long id = 1;
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String api = preferenceURL;
-        //String api = Helper.getConfigValue(this, "api_url");
-        String url = api + "/person/" + id;
-        System.out.println(url);
-
-        System.out.println("Hier");
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                JSONObject personInfo = null;
-                System.out.println(response);
-
-                Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
-                    }
-
-                });
-        queue.add(request);
-
+//// Request a string response from the provided URL.
+//        System.out.println("Hier");
+//
+//        long id = 1;
+//        RequestQueue queue = Volley.newRequestQueue(this);
+//        String api = preferenceURL;
+//        //String api = Helper.getConfigValue(this, "api_url");
+//        String url = api + "/person/" + id;
+//        System.out.println(url);
+//
+//        System.out.println("Hier");
+//
+//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                JSONObject personInfo = null;
+//                System.out.println(response);
+//
+//                Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
+//            }
+//        },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        error.printStackTrace();
+//                        Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                });
+//        queue.add(request);
 
         //connection.setText(Helper.getConfigValue(this,"api_url"));
 
@@ -191,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                 String email = eMailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 String loginURL = Helper.retriveData(LoginActivity.this, "url") + "/login";
-
+                RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
                 //Call<ResponseBody>
                 JSONObject personInfo = null;
                 JSONObject jsonObject = null;
@@ -205,7 +204,6 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 System.out.println(data);
-                //new SendDeviceDetails().execute("http://10.0.2.2:8080/user/login", jsonObject.toString());
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, loginURL, data, new Response.Listener<JSONObject>() {
                     JSONObject personInfo = null;
 
@@ -316,52 +314,6 @@ public class LoginActivity extends AppCompatActivity {
                 return super.onContextItemSelected(item);
         }
     }
-        private class SendDeviceDetails extends AsyncTask<String, Void, String> {
-
-            @Override
-            protected String doInBackground(String... params) {
-
-                String data = "";
-
-                HttpURLConnection httpURLConnection = null;
-                try {
-
-                    httpURLConnection = (HttpURLConnection) new URL(params[0]).openConnection();
-                    httpURLConnection.setRequestMethod("POST");
-
-                    httpURLConnection.setDoOutput(true);
-
-                    DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
-                    wr.writeBytes("PostData=" + params[0]);
-                    wr.flush();
-                    wr.close();
-
-                    InputStream in = httpURLConnection.getInputStream();
-                    InputStreamReader inputStreamReader = new InputStreamReader(in);
-
-                    int inputStreamData = inputStreamReader.read();
-                    while (inputStreamData != -1) {
-                        char current = (char) inputStreamData;
-                        inputStreamData = inputStreamReader.read();
-                        data += current;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if (httpURLConnection != null) {
-                        httpURLConnection.disconnect();
-                    }
-                }
-
-                return data;
-            }
-
-            @Override
-            protected void onPostExecute(String result) {
-                super.onPostExecute(result);
-                Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
-            }
-        }
     }
 
 
