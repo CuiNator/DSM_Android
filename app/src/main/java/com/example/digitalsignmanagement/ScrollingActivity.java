@@ -102,13 +102,6 @@ public class ScrollingActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.unterschrifen);
 
-        // Request a string response from the provided URL.
-        System.out.println("Hier");
-
-        // Request a string response from the provided URL.
-        System.out.println("Hier");
-
-        //long id = 1;
         RequestQueue queue = Volley.newRequestQueue(this);
 
         //String api = Helper.getConfigValue(this, "api_url");
@@ -133,18 +126,7 @@ public class ScrollingActivity extends AppCompatActivity {
 //                });
 //        queue.add(request);
 
-
-
-//        ObjectMapper mapper = new ObjectMapper();
-//        try {
-//            Sign sign = mapper.readValue(new URL(url), Sign.class);
-//            System.out.println(sign);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonArrayRequest request = new JsonArrayRequest (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONObject response) {
                 JSONObject personInfo = null;
@@ -199,48 +181,4 @@ public class ScrollingActivity extends AppCompatActivity {
         list.add(new Sign("Urlaubsantrag", "20.11.22", "Yanik2", false));
         list.add(new Sign("Urlaubsantrag", "20.11.22", "Yanik3", true));
         return list;}
-
-    private void loadPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyKey",MODE_PRIVATE);
-        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        if (sharedPreferences.getString("url", "") == "") {
-//            preferenceURL = "http://10.0.2.2:8080/person";
-//        } else {
-            preferenceURL = sharedPreferences.getString("url", "");
-        }
-
-
-    public void requestWithSomeHttpHeaders() {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://www.somewebsite.com";
-        StringRequest getRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>()
-                {
-                    @Override
-                    public void onResponse(String response) {
-                        // response
-                        Log.d("Response", response);
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // TODO Auto-generated method stub
-                        Log.d("ERROR","error => "+error.toString());
-                    }
-                }
-        ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String>  params = new HashMap<String, String>();
-                params.put("User-Agent", "Nintendo Gameboy");
-                params.put("Accept-Language", "fr");
-
-                return params;
-            }
-        };
-        queue.add(getRequest);
-
-    }
 }
