@@ -1,6 +1,5 @@
 package com.example.digitalsignmanagement.unterschriften;
 
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,11 @@ import com.example.digitalsignmanagement.R;
 
 import java.util.ArrayList;
 
-public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
+public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
-    private ArrayList<Sign> signs;
+    private ArrayList<Document> signs;
 
-    public SignAdapter(ArrayList<Sign> signs) {
+    public DocAdapter(ArrayList<Document> signs) {
         this.signs = signs;
     }
 
@@ -33,11 +32,11 @@ public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Sign sign = signs.get(position);
+        Document sign = signs.get(position);
 
-        holder.name.setText(sign.getName());
-        holder.ersteller.setText(sign.getErsteller());
-        holder.datum.setText(sign.getDatum());
+        holder.name.setText(sign.getDocumentName());
+        holder.ersteller.setText(sign.getStatus());
+        holder.datum.setText(sign.getUploadDate());
     }
 
     @Override
@@ -79,7 +78,7 @@ public class SignAdapter extends RecyclerView.Adapter<SignAdapter.ViewHolder> {
         }
 
         public void setOnItemClickListener(ClickListener clickListener) {
-            SignAdapter.clickListener = clickListener;
+            DocAdapter.clickListener = clickListener;
         }
 
         public interface ClickListener {

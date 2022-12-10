@@ -20,14 +20,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.digitalsignmanagement.data.Result;
 import com.example.digitalsignmanagement.databinding.ActivityScrollingBinding;
-import com.example.digitalsignmanagement.unterschriften.Sign;
-import com.example.digitalsignmanagement.unterschriften.SignAdapter;
+import com.example.digitalsignmanagement.unterschriften.Document;
+import com.example.digitalsignmanagement.unterschriften.DocAdapter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +43,7 @@ public class ScrollingActivity extends AppCompatActivity {
     private String preferenceURL;
     private Class Sign;
     TextView loggedUser;
-
+    ArrayList<Document> documentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class ScrollingActivity extends AppCompatActivity {
         String id = Helper.retriveId(this);
         System.out.println("HierInScrolling");
         System.out.println(name + token + id);
+        String url = preferenceURL + "/document";
+        ArrayList<Document> documents = getDocument(url,token);
         //loadPreferences();
         binding = ActivityScrollingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -58,17 +63,19 @@ public class ScrollingActivity extends AppCompatActivity {
         loggedUser.setText("Current user: " + name);
 
         //AndroidNetworking.initialize(getApplicationContext());
-
-        ArrayList<Sign> signs = initSigns();
         System.out.println(preferenceURL);
-        String url = preferenceURL + "/document";
+
+
 
         this.sign = (RecyclerView) findViewById(R.id.unterschrifen);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         this.sign.setLayoutManager(mLayoutManager);
 
-        adapter = new SignAdapter(signs);
-        this.sign.setAdapter(adapter);
+        //adapter= new DocAdapter(documentList);
+        //this.sign.setAdapter(adapter);
+
+
+
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);
         this.sign.addItemDecoration(itemDecoration);
@@ -79,11 +86,10 @@ public class ScrollingActivity extends AppCompatActivity {
         toolBarLayout.setTitle(getTitle());
         Context context = getBaseContext();
 
-        SignAdapter mAdapter = new SignAdapter(signs);
 
         RecyclerView recyclerView = findViewById(R.id.unterschrifen);
 
-        RequestQueue queue = Volley.newRequestQueue(this);
+        //RequestQueue queue = Volley.newRequestQueue(this);
 
         //String api = Helper.getConfigValue(this, "api_url");
 
@@ -107,15 +113,56 @@ public class ScrollingActivity extends AppCompatActivity {
 //                });
 //        queue.add(request);
 
+
+        //queue.add(request);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(context, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Intent intent1 = new Intent(ScrollingActivity.this, activity_sign.class);
+                        startActivity(intent1);
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
+    }
+
+
+
+//    private ArrayList<Document> initSigns() {
+//        ArrayList<Document> list = new ArrayList<>();
+//        list.add(new Document("Urlaubsantrag", "20.11.22", "Yanik", false));
+//        list.add(new Document("Urlaubsantrag", "20.11.22", "Yanik1", true));
+//        list.add(new Document("Urlaubsantrag", "20.11.22", "Yanik2", false));
+//        list.add(new Document("Urlaubsantrag", "20.11.22", "Yanik3", true));
+//        return list;}
+
+
+
+    private ArrayList<Document> getDocument(String url,String token){
+        RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest request = new JsonArrayRequest (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
             @Override
             public void onResponse(JSONArray  response) {
                 JSONObject personInfo = null;
                 System.out.println("response");
                 System.out.println(response);
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    ArrayList<Document> docList = objectMapper.readValue(String.valueOf(response), objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, Document.class));
+                    System.out.println(docList);
+//                    setDocumentList(docList);
+                    adapter= new DocAdapter(docList);
+                    ScrollingActivity.this.sign.setAdapter(adapter);
 
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
-
             }
         },
                 new Response.ErrorListener() {
@@ -135,31 +182,23 @@ public class ScrollingActivity extends AppCompatActivity {
                 headers.put("Authorization","Bearer "+ token);
                 System.out.println(headers.toString());
                 return headers;
-        }
+            }
         };
+        System.out.println("Ausgabe ist: "+ documentList);
         queue.add(request);
+        return documentList;
 
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(context, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        Intent intent1 = new Intent(ScrollingActivity.this, activity_sign.class);
-                        startActivity(intent1);
-                    }
+    }
+//    public static void setDocumentList(ArrayList<Document> documentList) {
+//        this.documentList = documentList;
+//    }
+//    @Override
+//    public void callback() {
+//        System.out.println("callback");
+//    }
 
-                    @Override public void onLongItemClick(View view, int position) {
-                        // do whatever
-                    }
-                })
-        );
+    public interface Callback{
+        public void getDateFromResult(JSONArray response);
     }
 
-
-
-    private ArrayList<Sign> initSigns() {
-        ArrayList<Sign> list = new ArrayList<>();
-        list.add(new Sign("Urlaubsantrag", "20.11.22", "Yanik", false));
-        list.add(new Sign("Urlaubsantrag", "20.11.22", "Yanik1", true));
-        list.add(new Sign("Urlaubsantrag", "20.11.22", "Yanik2", false));
-        list.add(new Sign("Urlaubsantrag", "20.11.22", "Yanik3", true));
-        return list;}
 }
