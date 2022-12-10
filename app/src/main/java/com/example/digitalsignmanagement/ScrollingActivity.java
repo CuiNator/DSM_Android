@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ScrollingActivity extends AppCompatActivity {
-
+    Callback callback;
     private ActivityScrollingBinding binding;
     private RecyclerView sign;
     private RecyclerView.Adapter adapter;
@@ -148,6 +148,8 @@ public class ScrollingActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(JSONArray  response) {
+                //callback.callback();
+                //callback.calledFromMain(response);
                 JSONObject personInfo = null;
                 System.out.println("response");
                 System.out.println(response);
