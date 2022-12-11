@@ -41,7 +41,7 @@ public class ScrollingActivity extends AppCompatActivity {
     Callback callback;
     private ActivityScrollingBinding binding;
     private RecyclerView sign;
-    private RecyclerView.Adapter adapter;
+    private DocAdapter adapter;
     private String preferenceURL;
     private Class Sign;
     TextView loggedUser;
@@ -50,6 +50,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         preferenceURL = Helper.retriveData(this, "url");
         String name = Helper.retriveName(this);
@@ -68,7 +69,8 @@ public class ScrollingActivity extends AppCompatActivity {
         //AndroidNetworking.initialize(getApplicationContext());
         System.out.println(preferenceURL);
 
-
+        //adapter = new DocAdapter(this, documents);
+        //this.sign.setAdapter(adapter);
 
         this.sign = (RecyclerView) findViewById(R.id.unterschrifen);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
