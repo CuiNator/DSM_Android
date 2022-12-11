@@ -35,7 +35,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
         Document sign = signs.get(position);
 
         holder.name.setText(sign.getDocumentName());
-        holder.ersteller.setText(sign.getStatus());
+        holder.ersteller.setText(sign.getCreator().getName());
         holder.datum.setText(sign.getUploadDate());
     }
 
@@ -48,7 +48,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
         }
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public final View view;
         public final TextView name;

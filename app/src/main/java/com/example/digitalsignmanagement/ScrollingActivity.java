@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ public class ScrollingActivity extends AppCompatActivity {
     private Class Sign;
     TextView loggedUser;
     ArrayList<Document> documentList;
+    private Button buttonSign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +77,6 @@ public class ScrollingActivity extends AppCompatActivity {
         //adapter= new DocAdapter(documentList);
         //this.sign.setAdapter(adapter);
 
-
-
-
         DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);
         this.sign.addItemDecoration(itemDecoration);
 
@@ -85,42 +85,27 @@ public class ScrollingActivity extends AppCompatActivity {
         CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
         toolBarLayout.setTitle(getTitle());
         Context context = getBaseContext();
-
-
         RecyclerView recyclerView = findViewById(R.id.unterschrifen);
-
-        //RequestQueue queue = Volley.newRequestQueue(this);
-
-        //String api = Helper.getConfigValue(this, "api_url");
-
-//        JacksonRequest request = new JacksonRequest(Request.Method.GET, url, Sign, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                JSONObject personInfo = null;
-//                System.out.println(response);
-//
-//                Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
-//            }
-//        },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        error.printStackTrace();
-//                        Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
-//                    }
-//
-//
-//                });
-//        queue.add(request);
-
-
-        //queue.add(request);
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(context, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Intent intent1 = new Intent(ScrollingActivity.this, activity_sign.class);
-                        startActivity(intent1);
+                        System.out.println("onClick");
+//                        int itemPosition = recyclerView.indexOfChild(v);
+//                        //    Toast.makeText(MainActivity.this,"Selected item position is---"+ itemPosition,Toast.LENGTH_SHORT).show();
+//                        textView = (TextView)v.findViewById(R.id.number_textview);
+//                        Toast.makeText(MainActivity.this,"Selected val of clicked position is---"+ textView.getText().toString(),Toast.LENGTH_SHORT).show();
+
+//                        Intent intent1 = new Intent(ScrollingActivity.this, activity_sign.class);
+//                        startActivity(intent1);
+                        if(adapter.getSelected() != null){
+                            Toast.makeText(getApplicationContext(), adapter.getSelected().getCreator().toString(),Toast.LENGTH_SHORT).show();
+                            System.out.println(adapter.getSelected().getCreator().getName());
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), adapter.getSelected().getCreator().toString(),Toast.LENGTH_SHORT).show();
+                            System.out.println("ze");
+                        }
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
