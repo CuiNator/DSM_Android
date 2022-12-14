@@ -2,19 +2,6 @@ package com.example.digitalsignmanagement;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.util.Log;
-
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
-import org.apache.commons.configuration2.builder.fluent.Configurations;
-import org.apache.commons.configuration2.ex.ConfigurationException;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 public final class Helper {
 
@@ -41,20 +28,33 @@ public final class Helper {
     }
     public static void insertUserData(Context context,String name,String token, String id){
         SharedPreferences.Editor editor=getPrefs(context).edit();
-        editor.putString("name",name);
+        editor.putString("userName",name);
         editor.putString("token",token);
-        editor.putString("id",id);
+        editor.putString("userId",id);
         editor.commit();
     }
-    public static String retriveName(Context context){
-        String data = getPrefs(context).getString("name","no_data_found");
+    public static String retriveUserName(Context context){
+        String data = getPrefs(context).getString("userName","no_data_found");
         return data;}
 
     public static String retriveToken(Context context){
         String data = getPrefs(context).getString("token","no_data_found");
         return data;}
 
-    public static String retriveId(Context context){
-        String data = getPrefs(context).getString("id","no_data_found");
+    public static String retriveUserId(Context context){
+        String data = getPrefs(context).getString("userId","no_data_found");
+        return data;}
+
+    public static void insertDocData(Context context,String docName, String docId) {
+        SharedPreferences.Editor editor = getPrefs(context).edit();
+        editor.putString("docName", docName);
+        editor.putString("docId", docId);
+        editor.commit();
+    }
+    public static String retriveDocId(Context context){
+        String data = getPrefs(context).getString("docId","no_data_found");
+        return data;}
+    public static String retriveDocName(Context context){
+        String data = getPrefs(context).getString("docName","no_data_found");
         return data;}
 }

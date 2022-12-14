@@ -11,12 +11,22 @@ public class Document {
     private Creator creator;
     private boolean active;
 
+    public String[] getSignatures() {
+        return signatures;
+    }
+
+    public void setSignatures(String[] signatures) {
+        this.signatures = signatures;
+    }
+
+    private String[] signatures;
+
 
 
 
     public Document(){}
 
-    public Document(long documentId, String uploadDate, String completionDate, String status, String pdf, String documentName, Creator creator, boolean active) {
+    public Document(long documentId, String uploadDate, String completionDate, String status, String pdf, String documentName, Creator creator, boolean active, String[] signatures) {
         this.documentId = documentId;
         this.uploadDate = uploadDate;
         this.completionDate = completionDate;
@@ -25,6 +35,7 @@ public class Document {
         this.documentName = documentName;
         this.creator = creator;
         this.active = active;
+        this.signatures = signatures;
     }
 
     public long getDocumentId() {

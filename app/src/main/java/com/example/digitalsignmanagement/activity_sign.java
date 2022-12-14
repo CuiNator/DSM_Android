@@ -2,16 +2,42 @@ package com.example.digitalsignmanagement;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
+import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpResponse;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.NameValuePair;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.HttpClient;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.entity.UrlEncodedFormEntity;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.methods.HttpPut;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.impl.client.DefaultHttpClient;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.message.BasicNameValuePair;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import me.panavtec.drawableview.DrawableView;
 import me.panavtec.drawableview.DrawableViewConfig;
@@ -21,6 +47,7 @@ public class activity_sign extends AppCompatActivity {
     DrawableView drawableView;
     DrawableViewConfig config;
     Button increase, decrease, color, undo;
+    private String urlRaw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +68,14 @@ public class activity_sign extends AppCompatActivity {
         color = findViewById(R.id.Save);
         undo = findViewById(R.id.undo);
         config = new DrawableViewConfig();
+        String token = Helper.retriveToken(this);
+        String userId = Helper.retriveUserId(this);
+        String docId = Helper.retriveDocId(this);
+        String DocName = Helper.retriveDocName(this);
+        String preferenceURL = Helper.retriveData(this, "url");
+        urlRaw = preferenceURL+"/signers/"+userId+"/documents/"+docId;
+
+        getSupportActionBar().setTitle(DocName);
 
         // set stroke color as black initially
         config.setStrokeColor(getResources().getColor(android.R.color.black));
@@ -70,6 +105,7 @@ public class activity_sign extends AppCompatActivity {
             public void onClick(View view) {
                 // increase the stroke width by 10
                 config.setStrokeWidth(config.getStrokeWidth() + 10);
+
             }
         });
         decrease.setOnClickListener(new View.OnClickListener() {
@@ -86,20 +122,13 @@ public class activity_sign extends AppCompatActivity {
                 content.setDrawingCacheEnabled(true);
                 content.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
                 Bitmap bitmap = content.getDrawingCache();
-                String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-                File file = new File("sdcard/Pictures/image.png");
-                FileOutputStream ostream;
-                try {
-                    file.createNewFile();
-                    ostream = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
-                    ostream.flush();
-                    ostream.close();
-                    Toast.makeText(getApplicationContext(), "image saved", Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
-                }
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream .toByteArray();
+                //String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                String encoded = Base64.encodeToString(
+                        byteArray, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
+                sendRequest(encoded,token);
             }
         });
         undo.setOnClickListener(new View.OnClickListener() {
@@ -109,5 +138,61 @@ public class activity_sign extends AppCompatActivity {
                 drawableView.clear();
             }
         });
+
+
+    }
+    private void sendRequest(String encoded,String token) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        final JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("signature", encoded);
+            System.out.println(jsonObject.toString());
+        } catch (JSONException e) {
+            // handle exception
+        }
+
+
+        JsonObjectRequest putRequest = new JsonObjectRequest(Request.Method.PUT, urlRaw, jsonObject,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // response
+                        Log.d("Response", response.toString());
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        ) {
+
+            @Override
+            public Map<String, String> getHeaders()
+            {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization","Bearer "+ token);
+                return headers;
+            }
+
+            @Override
+            public byte[] getBody() {
+
+                try {
+                    Log.i("json", jsonObject.toString());
+                    return jsonObject.toString().getBytes("UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+
+        queue.add(putRequest);
     }
 }
