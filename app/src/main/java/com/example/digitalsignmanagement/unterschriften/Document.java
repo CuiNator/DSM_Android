@@ -3,39 +3,20 @@ package com.example.digitalsignmanagement.unterschriften;
 public class Document {
 
     private long documentId;
-    private String uploadDate;
-    private String completionDate;
+    private Date creationDate;
     private String status;
-    private String pdf;
-    private String documentName;
-    private Creator creator;
-    private boolean active;
-
-    public String[] getSignatures() {
-        return signatures;
-    }
-
-    public void setSignatures(String[] signatures) {
-        this.signatures = signatures;
-    }
-
-    private String[] signatures;
-
-
-
+    private String name;
+    private String creatorName;
 
     public Document(){}
 
-    public Document(long documentId, String uploadDate, String completionDate, String status, String pdf, String documentName, Creator creator, boolean active, String[] signatures) {
+    public Document(long documentId, Date creationDate, String status, String documentName, String creator) {
         this.documentId = documentId;
-        this.uploadDate = uploadDate;
-        this.completionDate = completionDate;
+        this.creationDate = creationDate;
         this.status = status;
-        this.pdf = pdf;
-        this.documentName = documentName;
-        this.creator = creator;
-        this.active = active;
-        this.signatures = signatures;
+        this.name = documentName;
+        this.creatorName = creator;
+
     }
 
     public long getDocumentId() {
@@ -46,12 +27,10 @@ public class Document {
         this.documentId = documentId;
     }
 
-    public String getUploadDate() {
-        return uploadDate;
-    }
+    public Date getCreationDate() {return creationDate;}
 
-    public void setUploadDate(String uploadDate) {
-        this.uploadDate = uploadDate;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public String getCompletionDate() {
@@ -78,12 +57,12 @@ public class Document {
         this.pdf = pdf;
     }
 
-    public String getDocumentName() {
-        return documentName;
+    public String getName() {
+        return name;
     }
 
-    public void setDocumentName(String documentName) {
-        this.documentName = documentName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Creator getCreator() {

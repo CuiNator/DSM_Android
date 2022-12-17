@@ -46,7 +46,7 @@ public class ScrollingActivity extends AppCompatActivity {
         String id = Helper.retriveUserId(this);
         System.out.println("HierInScrolling");
         System.out.println(name + token + id);
-        String url = preferenceURL + "/document";
+        String url = preferenceURL + "/signers/"+id+"/documents";
         ArrayList<Document> documents = getDocument(url,token);
         adapter= new DocAdapter(ScrollingActivity.this, documentList);
         //loadPreferences();

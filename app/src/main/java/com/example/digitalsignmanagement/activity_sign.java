@@ -149,7 +149,7 @@ public class activity_sign extends AppCompatActivity {
             jsonObject.put("signature", encoded);
             System.out.println(jsonObject.toString());
         } catch (JSONException e) {
-            // handle exception
+            System.out.println(e.getMessage());
         }
 
 
@@ -176,6 +176,7 @@ public class activity_sign extends AppCompatActivity {
             public Map<String, String> getHeaders()
             {
                 Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Accept", "application/json");
                 headers.put("Authorization","Bearer "+ token);
                 return headers;
             }
