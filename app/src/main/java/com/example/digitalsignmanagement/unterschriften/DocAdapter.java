@@ -85,6 +85,8 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
         public Button intern;
         public Button extern;
 
+
+
         public ViewHolder(@NonNull View view) {
             super(view);
             this.view = view;

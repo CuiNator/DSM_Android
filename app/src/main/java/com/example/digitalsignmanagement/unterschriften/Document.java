@@ -1,5 +1,8 @@
 package com.example.digitalsignmanagement.unterschriften;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Document {
 
     private long documentId;
@@ -33,28 +36,12 @@ public class Document {
         this.creationDate = creationDate;
     }
 
-    public String getCompletionDate() {
-        return completionDate;
-    }
-
-    public void setCompletionDate(String completionDate) {
-        this.completionDate = completionDate;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getPdf() {
-        return pdf;
-    }
-
-    public void setPdf(String pdf) {
-        this.pdf = pdf;
     }
 
     public String getName() {
@@ -65,19 +52,12 @@ public class Document {
         this.name = name;
     }
 
-    public Creator getCreator() {
-        return creator;
+    public String getCreatorName() {
+        return creatorName;
     }
 
-    public void setCreator(Creator creator) {
-        this.creator = creator;
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 }
