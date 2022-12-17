@@ -16,27 +16,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpResponse;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.NameValuePair;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.HttpClient;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.entity.UrlEncodedFormEntity;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.client.methods.HttpPut;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.impl.client.DefaultHttpClient;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.message.BasicNameValuePair;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import me.panavtec.drawableview.DrawableView;
@@ -46,7 +32,7 @@ public class activity_sign extends AppCompatActivity {
 
     DrawableView drawableView;
     DrawableViewConfig config;
-    Button increase, decrease, color, undo;
+    Button increase, decrease, save, undo;
     private String urlRaw;
 
     @Override
@@ -65,7 +51,7 @@ public class activity_sign extends AppCompatActivity {
         drawableView = findViewById(R.id.paintView);
         increase = findViewById(R.id.increase);
         decrease = findViewById(R.id.decrease);
-        color = findViewById(R.id.Save);
+        save = findViewById(R.id.Save);
         undo = findViewById(R.id.undo);
         config = new DrawableViewConfig();
         String token = Helper.retriveToken(this);
@@ -115,7 +101,7 @@ public class activity_sign extends AppCompatActivity {
                 config.setStrokeWidth(config.getStrokeWidth() - 10);
             }
         });
-        color.setOnClickListener(new View.OnClickListener() {
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 View content = drawableView;
