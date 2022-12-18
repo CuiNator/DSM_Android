@@ -50,71 +50,23 @@ public class ScrollingActivity extends AppCompatActivity {
         String url = preferenceURL + "/signers/"+id+"/documents";
         ArrayList<Document> documents = getDocument(url,token);
         adapter= new DocAdapter(ScrollingActivity.this, documentList);
-        //loadPreferences();
-        //binding = ActivityScrollingBinding.inflate(getLayoutInflater());
+
         setContentView(R.layout.activity_scrolling);
         loggedUser = findViewById(R.id.User);
         loggedUser.setText("Current user: " + name);
 
-        //AndroidNetworking.initialize(getApplicationContext());
         System.out.println(preferenceURL);
 
-        //adapter = new DocAdapter(this, documents);
-        //this.sign.setAdapter(adapter);
 
         this.sign = (RecyclerView) findViewById(R.id.unterschrifen);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         this.sign.setLayoutManager(mLayoutManager);
 
-        //adapter= new DocAdapter(documentList);
-        //this.sign.setAdapter(adapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);
         this.sign.addItemDecoration(itemDecoration);
 
-        //Toolbar toolbar = binding.toolbar;
-        //setSupportActionBar(toolbar);
-        //CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
-        //toolBarLayout.setTitle(getTitle());
-
-//        recyclerView.addOnItemTouchListener(
-//                new RecyclerItemClickListener(context, recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
-//                    @Override public void onItemClick(View view, int position) {
-//                        System.out.println("onClick");
-////                        int itemPosition = recyclerView.indexOfChild(v);
-////                        //    Toast.makeText(MainActivity.this,"Selected item position is---"+ itemPosition,Toast.LENGTH_SHORT).show();
-////                        textView = (TextView)v.findViewById(R.id.number_textview);
-////                        Toast.makeText(MainActivity.this,"Selected val of clicked position is---"+ textView.getText().toString(),Toast.LENGTH_SHORT).show();
-//
-////                        Intent intent1 = new Intent(ScrollingActivity.this, activity_sign.class);
-////                        startActivity(intent1);
-//                        if(adapter.getSelected() != null){
-//                            Toast.makeText(getApplicationContext(), adapter.getSelected().getCreator().toString(),Toast.LENGTH_SHORT).show();
-//                            System.out.println(adapter.getSelected().getCreator().getName());
-//                        }
-//                        else{
-//                            Toast.makeText(getApplicationContext(), adapter.getSelected().getCreator().toString(),Toast.LENGTH_SHORT).show();
-//                            System.out.println("ze");
-//                        }
-//                    }
-//
-//                    @Override public void onLongItemClick(View view, int position) {
-//                        // do whatever
-//                    }
-//                })
-//        );
     }
-
-
-
-//    private ArrayList<Document> initSigns() {
-//        ArrayList<Document> list = new ArrayList<>();
-//        list.add(new Document("Urlaubsantrag", "20.11.22", "Yanik", false));
-//        list.add(new Document("Urlaubsantrag", "20.11.22", "Yanik1", true));
-//        list.add(new Document("Urlaubsantrag", "20.11.22", "Yanik2", false));
-//        list.add(new Document("Urlaubsantrag", "20.11.22", "Yanik3", true));
-//        return list;}
-
 
 
     private ArrayList<Document> getDocument(String url,String token){

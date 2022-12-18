@@ -122,6 +122,20 @@ public class activity_sign extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 byte[] byteArray = byteArrayOutputStream .toByteArray();
                 //String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+//                File file = new File("sdcard/Pictures/image.png");
+//                FileOutputStream ostream;
+//                try {
+//                    file.createNewFile();
+//                    ostream = new FileOutputStream(file);
+//                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
+//                    ostream.flush();
+//                    ostream.close();
+//                    Toast.makeText(getApplicationContext(), "image saved", 5000).show();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(getApplicationContext(), "error", 5000).show();
+//                }
+
                 String encoded = Base64.encodeToString(
                         byteArray, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
                 sendRequest(encoded,token);

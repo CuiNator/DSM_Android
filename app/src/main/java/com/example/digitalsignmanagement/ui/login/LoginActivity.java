@@ -34,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
     String preferenceURL;
     String savedInput;
-    List<Document> unterschriften = new ArrayList<Document>();
 
     @Override
 
@@ -50,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         preferenceURL=Helper.retriveData(this,"url");
-        //loadPreferences();
         eMailEditText.setText("email@email.de");
         passwordEditText.setText("Password");
 
@@ -58,22 +56,16 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // loadingProgressBar.setVisibility(View.VISIBLE);
-                // loginViewModel.login(usernameEditText.getText().toString(),
-                //        passwordEditText.getText().toString());
                 String email = eMailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 String loginURL = Helper.retriveData(LoginActivity.this, "url") + "/login";
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-                //Call<ResponseBody>
-                JSONObject personInfo = null;
-                JSONObject jsonObject = null;
+
                 JSONObject data = null;
                 try {
                     data = new JSONObject();
                     data.put("email", email);
                     data.put("password", password);
-                    //jsonObject = new JSONObject("{\"email\":"+ email +",\"password\":"+password+"}");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -113,13 +105,6 @@ public class LoginActivity extends AppCompatActivity {
 
                         });
                 queue.add(request);
-//                try {
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-
-//
             }
         });
     }
@@ -151,7 +136,6 @@ public class LoginActivity extends AppCompatActivity {
                         savedInput = input.getText().toString();
                         System.out.println(savedInput);
                         Helper.insertData(LoginActivity.this, "url", savedInput);
-                        //SavePreferences("url", savedInput);
                         System.out.println("Hier!");
                     }
                 });
