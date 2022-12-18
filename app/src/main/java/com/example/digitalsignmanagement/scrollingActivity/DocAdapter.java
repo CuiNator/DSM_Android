@@ -1,16 +1,14 @@
-package com.example.digitalsignmanagement.unterschriften;
+package com.example.digitalsignmanagement.scrollingActivity;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
-import com.example.digitalsignmanagement.ScrollingActivity;
 import com.example.digitalsignmanagement.activity_sign;
 
 import java.text.SimpleDateFormat;
@@ -52,15 +49,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         System.out.println("Click");
-        //Document sign = documents.get(position);
         holder.bind(documents.get(position));
-//        holder.name.setText(sign.getDocumentName());
-//        holder.ersteller.setText(sign.getCreator().getName());
-//        holder.datum.setText(sign.getUploadDate());
-//
-//        if(checkedPosition == position){
-//            System.out.println(sign.getCreator().getName());
-//        }
 
     }
 
@@ -125,18 +114,8 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             }
 
             if(v.getId() == extern.getId()){
-//                System.out.println("Button pressed Extern ");
-//                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-//                builder.setTitle("URL Einrichten");
-//                final Drop input = new EditText(v.getContext());
-//// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-//                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-//                //input.setText(preferenceURL);
-//                builder.setView(input);
-//                builder.show();
-//
+
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(v.getContext());
-                //builderSingle.setIcon(R.drawable.ic_launcher);
                 builderSingle.setTitle("Select One Name:-");
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.select_dialog_singlechoice);
@@ -174,26 +153,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
             }
         }
-
-
-
-
-
-
-
     }
-
-//    public String parseCreationDate(String creationDate){
-//        String string = creationDate;
-//        String[] parts = string.split("T");
-//        String part1 = parts[0];
-//        String part2 = parts[1];
-//        System.out.println(datestr+" "+part2);
-//        SimpleDateFormat formatter = new SimpleDateFormat("dd-mm-yyyy");
-//        String datestr = formatter.format(part1);
-//        System.out.println(datestr+" "+part2);
-//        return datestr+" "+part2;
-//    }
 
 }
 

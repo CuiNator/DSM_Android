@@ -1,6 +1,5 @@
-package com.example.digitalsignmanagement.unterschriften;
+package com.example.digitalsignmanagement.scrollingActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Document {

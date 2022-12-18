@@ -1,5 +1,6 @@
 package com.example.digitalsignmanagement;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Base64;
@@ -21,7 +22,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -115,6 +125,7 @@ public class activity_sign extends AppCompatActivity {
                 String encoded = Base64.encodeToString(
                         byteArray, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
                 sendRequest(encoded,token);
+                //writeToFile(encoded,activity_sign.this);
             }
         });
         undo.setOnClickListener(new View.OnClickListener() {
@@ -181,5 +192,15 @@ public class activity_sign extends AppCompatActivity {
         };
 
         queue.add(putRequest);
+    }
+    private void writeToFile(String data, Context context) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
     }
 }

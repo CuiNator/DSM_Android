@@ -1,4 +1,4 @@
-package com.example.digitalsignmanagement;
+package com.example.digitalsignmanagement.scrollingActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +17,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.digitalsignmanagement.unterschriften.Document;
-import com.example.digitalsignmanagement.unterschriften.DocAdapter;
+import com.example.digitalsignmanagement.Helper;
+import com.example.digitalsignmanagement.R;
+import com.example.digitalsignmanagement.activity_sign;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
@@ -122,17 +123,12 @@ public class ScrollingActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(JSONArray  response) {
-                //callback.callback();
-                //callback.calledFromMain(response);
-                JSONObject personInfo = null;
                 System.out.println("response");
                 System.out.println(response);
                 ObjectMapper objectMapper = new ObjectMapper();
                 try {
                     ArrayList<Document> docList = objectMapper.readValue(String.valueOf(response), objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, Document.class));
                     System.out.println(docList);
-//                    setDocumentList(docList);
-
 
                     documentList = docList;
                     adapter.setDocument(documentList);
@@ -156,7 +152,7 @@ public class ScrollingActivity extends AppCompatActivity {
                 })
         {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 //headers.put("Content-Type", "application/json");
                 headers.put("Authorization","Bearer "+ token);
@@ -169,11 +165,4 @@ public class ScrollingActivity extends AppCompatActivity {
         return documentList;
 
     }
-    public void nextSlide()
-    {
-        Intent intent1 = new Intent(ScrollingActivity.this, activity_sign.class);
-        startActivity(intent1);
-    }
-
-
 }
