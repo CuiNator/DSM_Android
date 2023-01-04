@@ -36,13 +36,12 @@ public class LoginActivity extends AppCompatActivity {
     String savedInput;
 
     @Override
-
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        getSupportActionBar().setTitle("LIRA DSM");
 
 
         final EditText eMailEditText = binding.email;

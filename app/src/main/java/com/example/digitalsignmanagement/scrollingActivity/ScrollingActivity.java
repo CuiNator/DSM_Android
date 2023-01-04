@@ -1,7 +1,16 @@
 package com.example.digitalsignmanagement.scrollingActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.InputType;
+import android.text.Layout;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
 import com.example.digitalsignmanagement.activity_sign;
+import com.example.digitalsignmanagement.ui.login.LoginActivity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
@@ -58,14 +68,10 @@ public class ScrollingActivity extends AppCompatActivity {
         System.out.println(preferenceURL);
 
 
+
         this.sign = (RecyclerView) findViewById(R.id.unterschrifen);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         this.sign.setLayoutManager(mLayoutManager);
-
-
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL);
-        this.sign.addItemDecoration(itemDecoration);
-
     }
 
 
@@ -85,6 +91,8 @@ public class ScrollingActivity extends AppCompatActivity {
                     documentList = docList;
                     adapter.setDocument(documentList);
                     ScrollingActivity.this.sign.setAdapter(adapter);
+                    sign.addItemDecoration(new DividerItemDecoration(sign.getContext(), DividerItemDecoration.VERTICAL));
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -117,4 +125,5 @@ public class ScrollingActivity extends AppCompatActivity {
         return documentList;
 
     }
+
 }

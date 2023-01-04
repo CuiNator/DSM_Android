@@ -136,16 +136,27 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String strName = arrayAdapter.getItem(which);
+                        String persId =null;
                         AlertDialog.Builder builderInner = new AlertDialog.Builder(v.getContext());
-                        builderInner.setMessage(strName);
-                        builderInner.setTitle("Your Selected Item is");
-                        builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        builderInner.show();
+                        for(int i = 0; i < externalSigners.length; i++){
+                            if (strName == externalSigners[i].getName())
+                                {
+                                    persId = String.valueOf(externalSigners[i].getPersonId());
+                                }
+                        }
+                        Helper.insertDocData(context, strName, persId);
+                        Intent intent1 = new Intent(v.getContext(), activity_sign.class);
+                        context.startActivity(intent1);
+
+//                        builderInner.setMessage(strName);
+//                        builderInner.setTitle("Your Selected Item is");
+//                        builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog,int which) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        builderInner.show();
                     }
                 });
                 builderSingle.show();
