@@ -71,9 +71,10 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
         public final TextView datum;
         public final TextView id;
         public final TextView status;
+        public final TextView gezeichnet;
         public Button intern;
         public Button extern;
-
+        public ExternalSigners externalSigners[];
 
 
         public ViewHolder(@NonNull View view) {
@@ -88,6 +89,9 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             extern = view.findViewById(R.id.signExtern);
             extern.setOnClickListener(this);
             id = view.findViewById(R.id.docId);
+            gezeichnet = view.findViewById(R.id.gezeichnet);
+
+            
         }
 
         void bind(final Document document){
@@ -99,9 +103,16 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             datum.setText(formatter.format(document.getCreationDate()));
             status.setText(document.getStatus());
 
+            String anzahl = document.getReceivedSignatures()+"/"+document.getMaxSigns();
+            gezeichnet.setText(anzahl);
+            if (document.getMaxSigns() == document.getReceivedSignatures()){
+                intern.setActivated(false);
+                extern.setActivated(false);
+            }
+            
             String docId = String.valueOf(document.getDocumentId());
             id.setText(docId);
-
+            externalSigners = document.getExternalSigners();
         }
         @Override
         public void onClick(View v){
@@ -119,11 +130,14 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                 builderSingle.setTitle("Select One Name:-");
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.select_dialog_singlechoice);
-                arrayAdapter.add("Hardik");
-                arrayAdapter.add("Archit");
-                arrayAdapter.add("Jignesh");
-                arrayAdapter.add("Umang");
-                arrayAdapter.add("Gatti");
+                for(int i = 0; i < externalSigners.length; i++){
+                    arrayAdapter.add(externalSigners[i].getName());
+                }
+//                arrayAdapter.add("Hardik");
+//                arrayAdapter.add("Archit");
+//                arrayAdapter.add("Jignesh");
+//                arrayAdapter.add("Umang");
+//                arrayAdapter.add("Gatti");
 
                 builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override

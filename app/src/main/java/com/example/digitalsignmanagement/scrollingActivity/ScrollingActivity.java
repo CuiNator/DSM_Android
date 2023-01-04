@@ -47,7 +47,8 @@ public class ScrollingActivity extends AppCompatActivity {
     TextView loggedUser;
     ArrayList<Document> documentList = new ArrayList<>();
     private DocAdapter adapter;
-
+    private RadioButton radioAll;
+    private RadioButton radioActive;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,10 @@ public class ScrollingActivity extends AppCompatActivity {
         String url = preferenceURL + "/signers/"+id+"/documents";
         ArrayList<Document> documents = getDocument(url,token);
         adapter= new DocAdapter(ScrollingActivity.this, documentList);
+
+//        radioActive = sign.findViewById(R.id.radioActive);
+//        radioAll = sign.findViewById(R.id.radioAll);
+
 
         setContentView(R.layout.activity_scrolling);
         loggedUser = findViewById(R.id.User);
@@ -76,6 +81,12 @@ public class ScrollingActivity extends AppCompatActivity {
 
 
     private ArrayList<Document> getDocument(String url,String token){
+//        if(radioAll.isChecked()){
+//
+//        }
+//        else{
+//
+//        }
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest request = new JsonArrayRequest (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
