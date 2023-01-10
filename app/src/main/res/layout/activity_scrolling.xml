@@ -18,15 +18,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
+        <TextView
             android:id="@+id/User"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
             android:clickable="false"
             android:editable="false"
             android:ems="10"
             android:enabled="true"
             android:inputType="textPersonName"
+            android:textSize="18sp"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -37,7 +38,7 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="Offene Unterschriften"
+            app:title="Documents to sign"
             app:toolbarId="@+id/toolbar">
 
             <androidx.appcompat.widget.Toolbar
@@ -46,7 +47,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/Theme.DigitalSignManagement.PopupOverlay"
-                app:title="Offene Unterschriften" />
+                app:title="Documents to sign" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -80,13 +81,13 @@
             android:id="@+id/radioActive"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:text="Aktive Dokumente" />
+            android:text="Active documents" />
 
         <RadioButton
             android:id="@+id/radioAll"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:text="Alle Dokumente" />
+            android:text="All documents" />
     </RadioGroup>
 
 

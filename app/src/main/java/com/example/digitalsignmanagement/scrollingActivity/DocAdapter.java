@@ -127,7 +127,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             if(v.getId() == extern.getId()){
 
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(v.getContext());
-                builderSingle.setTitle("Select One Name:-");
+                builderSingle.setTitle("Select external signer:-");
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.select_dialog_singlechoice);
                 for(int i = 0; i < externalSigners.length; i++){

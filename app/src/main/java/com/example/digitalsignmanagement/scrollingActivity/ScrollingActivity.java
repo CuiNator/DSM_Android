@@ -33,6 +33,7 @@ import com.example.digitalsignmanagement.ui.login.LoginActivity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -56,10 +57,14 @@ public class ScrollingActivity extends AppCompatActivity {
         String name = Helper.retriveUserName(this);
         String token = Helper.retriveToken(this);
         String id = Helper.retriveUserId(this);
-        System.out.println("HierInScrolling");
-        System.out.println(name + token + id);
+//        System.out.println("HierInScrolling");
+//        System.out.println(name + token + id);
         String url = preferenceURL + "/signers/"+id+"/documents";
-        ArrayList<Document> documents = getDocument(url,token);
+        try {
+            ArrayList<Document> documents = getDocument(url,token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         adapter= new DocAdapter(ScrollingActivity.this, documentList);
 
 //        radioActive = sign.findViewById(R.id.radioActive);
@@ -80,15 +85,24 @@ public class ScrollingActivity extends AppCompatActivity {
     }
 
 
-    private ArrayList<Document> getDocument(String url,String token){
+    private ArrayList<Document> getDocument(String url,String token) throws JSONException {
 //        if(radioAll.isChecked()){
 //
 //        }
 //        else{
 //
 //        }
+        //String jsonInputString ="{"st": "active"}";
+
+        JSONObject ka= new JSONObject();
+        ka.put("status","active");
+        JSONArray body = new JSONArray();
+        body.put(ka);
+        //body.put("status", "active");
+        System.out.println(body.toString());
+        System.out.println("Breakpoint");
         RequestQueue queue = Volley.newRequestQueue(this);
-        JsonArrayRequest request = new JsonArrayRequest (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest request = new JsonArrayRequest (Request.Method.GET, url, body, new Response.Listener<JSONArray>() {
 
             @Override
             public void onResponse(JSONArray  response) {
@@ -122,6 +136,13 @@ public class ScrollingActivity extends AppCompatActivity {
 
                 })
         {
+            @Override
+            public Map<String, String> getParams() {
+                System.out.println("DaRein");
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("status","active");
+                return params;
+            }
             @Override
             public Map<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<String, String>();

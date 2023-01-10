@@ -102,5 +102,5 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_scrolling2">ScrollingActivity2</string>
     <string name="action_url_aktualisieren">Verbindung einrichten</string>
-    <string name="url">Verbindung einrichten</string>
+    <string name="url">Edit connection</string>
 </resources>

@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 error.printStackTrace();
-                                Toast.makeText(getApplicationContext(), "Login Fehlgeschlagen", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
                             }
 
                         });
@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.url:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("URL Einrichten");
+                builder.setTitle("Edit connection");
 
 // Set up the input
                 final EditText input = new EditText(this);
@@ -131,11 +131,9 @@ public class LoginActivity extends AppCompatActivity {
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        System.out.println("Hier?");
                         savedInput = input.getText().toString();
                         System.out.println(savedInput);
                         Helper.insertData(LoginActivity.this, "url", savedInput);
-                        System.out.println("Hier!");
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
