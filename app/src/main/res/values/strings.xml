@@ -103,4 +103,6 @@
     <string name="title_activity_scrolling2">ScrollingActivity2</string>
     <string name="action_url_aktualisieren">Verbindung einrichten</string>
     <string name="url">Edit connection</string>
+    <string name="all">All</string>
+    <string name="active">Active</string>
 </resources>

@@ -28,6 +28,8 @@ import com.example.digitalsignmanagement.scrollingActivity.ScrollingActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Base64;
+
 public class LoginActivity extends AppCompatActivity {
 
 

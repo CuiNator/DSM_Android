@@ -18,6 +18,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <Button
+                android:id="@+id/pdf"
+                android:layout_width="96dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="65dp"
+                android:layout_marginEnd="13dp"
+                android:text="PDF"
+                app:layout_constraintEnd_toStartOf="@+id/signExtern"
+                app:layout_constraintStart_toEndOf="@+id/itemSign"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"

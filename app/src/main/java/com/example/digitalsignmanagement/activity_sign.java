@@ -217,4 +217,5 @@ public class activity_sign extends AppCompatActivity {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+
 }
