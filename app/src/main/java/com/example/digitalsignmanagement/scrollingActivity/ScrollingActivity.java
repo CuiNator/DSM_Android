@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class ScrollingActivity extends AppCompatActivity implements View.OnClickListener {
     private RecyclerView sign;
     private String preferenceURL;
@@ -59,12 +60,28 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         String id = Helper.retriveUserId(this);
 //        System.out.println("HierInScrolling");
 //        System.out.println(name + token + id);
-        String url = preferenceURL + "/signers/"+id+"/documents";
+        url = preferenceURL + "/signers/"+id+"/documents";
+//        filter = findViewById(R.id.filter);
+//        filter.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
+//            final MenuItem item = menu.add("item-text");
+//            item.setOnMenuItemClickListener(i -> {
+//                doWorkOnItemClick();
+//                return true; // Signifies you have consumed this event, so propogation can stop.
+//            });
+//            final MenuItem anotherItem = menu.add("another-item");
+//            anotherItem.setOnMenuItemClickListener(i -> doOtherWorkOnItemClick());
+//        });
+        //filter.setOnClickListener(View::showContextMenu);
+
+
+
+        //filter.setOnClickListener((View.OnClickListener) this);
         try {
             ArrayList<Document> documents = getDocument(url,token);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         adapter= new DocAdapter(ScrollingActivity.this, documentList);
 
         setContentView(R.layout.activity_scrolling);
@@ -104,13 +121,6 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
 //    }
 
     private ArrayList<Document> getDocument(String url,String token) throws JSONException {
-//        if(radioAll.isChecked()){
-//
-//        }
-//        else{
-//
-//        }
-        //String jsonInputString ="{"st": "active"}";
 
         JSONObject ka= new JSONObject();
         ka.put("status","active");
