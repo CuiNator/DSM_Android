@@ -228,7 +228,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
         private void getPDF() throws JSONException {
 
             url = Helper.retriveData(this.view.getContext(), "url");
-            url = url + "/signers/" + Helper.retriveUserId(this.view.getContext()) + "/documents/" + Helper.retriveDocId(this.view.getContext());
+            url = url + "/signers/" + Helper.retriveUserId(this.view.getContext()) + "/documents/" + this.id.getText().toString();
             String token = Helper.retriveToken(this.view.getContext());
 
             RequestQueue queue = Volley.newRequestQueue(this.view.getContext());
@@ -259,7 +259,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
                     OutputStream out = null;
                     try {
-                        out = new FileOutputStream("sdcard/Documents/test2.pdf");
+                        out = new FileOutputStream("sdcard/Documents/test2.pdf",false);
                         //out = new FileOutputStream(context.getFilesDir()+"temp.pdf");
                         out.write(base64b);
                         out.close();
