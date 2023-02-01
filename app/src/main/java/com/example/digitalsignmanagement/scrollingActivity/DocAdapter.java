@@ -6,43 +6,28 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.nfc.Tag;
-import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
-import android.provider.Browser;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
 import com.example.digitalsignmanagement.activity_sign;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.io.FileUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,13 +36,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -159,6 +139,11 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                 extern.setAlpha(.5f);
             }
 
+            if (document.getExternalSigners().length == 0) {
+                extern.setClickable(false);
+                extern.setAlpha(.5f);
+            }
+
             String docId = String.valueOf(document.getDocumentId());
             id.setText(docId);
             externalSigners = document.getExternalSigners();
@@ -184,7 +169,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             }
 
             if (v.getId() == extern.getId()) {
-
+                String docId = this.id.getText().toString();
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(v.getContext());
                 builderSingle.setTitle("Select external signer:-");
 
@@ -214,9 +199,11 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                         for (int i = 0; i < externalSigners.length; i++) {
                             if (strName == externalSigners[i].getName()) {
                                 persId = String.valueOf(externalSigners[i].getPersonId());
+                                System.out.println(persId);
                             }
                         }
-                        Helper.insertDocData(context, strName, persId);
+                        Helper.insertDocData(context, strName, docId);
+                        Helper.insertUserId(context,persId);
                         Intent intent1 = new Intent(v.getContext(), activity_sign.class);
                         context.startActivity(intent1);
 

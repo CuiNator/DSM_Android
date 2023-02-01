@@ -1,6 +1,9 @@
 package com.example.digitalsignmanagement;
 
+
+
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Base64;
@@ -22,16 +25,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +38,7 @@ public class activity_sign extends AppCompatActivity {
 
     DrawableView drawableView;
     DrawableViewConfig config;
-    Button increase, decrease, save, undo;
+    Button showOld, decrease, save, undo;
     private String urlRaw;
 
     @Override
@@ -53,13 +49,14 @@ public class activity_sign extends AppCompatActivity {
         // initialise the value
         initializelayout();
 
+
     }
 
     private void initializelayout() {
 
         // initialise the layout
         drawableView = findViewById(R.id.paintView);
-        increase = findViewById(R.id.increase);
+        showOld = findViewById(R.id.showOld);
         decrease = findViewById(R.id.decrease);
         save = findViewById(R.id.Save);
         undo = findViewById(R.id.undo);
@@ -69,7 +66,10 @@ public class activity_sign extends AppCompatActivity {
         String docId = Helper.retriveDocId(this);
         String DocName = Helper.retriveDocName(this);
         String preferenceURL = Helper.retriveData(this, "url");
+        String urlOldSignature = preferenceURL;
+        urlOldSignature = urlOldSignature +"/signers/"+ userId +"/documents/"+ docId +"/lastSignature";
         urlRaw = preferenceURL+"/signers/"+userId+"/documents/"+docId;
+        checkForOldSignature(urlOldSignature,token);
 
         getSupportActionBar().setTitle(DocName);
 
@@ -96,11 +96,12 @@ public class activity_sign extends AppCompatActivity {
         // set canvas width
         config.setCanvasWidth(width);
         drawableView.setConfig(config);
-        increase.setOnClickListener(new View.OnClickListener() {
+        String finalUrlOldSignature = urlOldSignature;
+        showOld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // increase the stroke width by 10
-                config.setStrokeWidth(config.getStrokeWidth() + 10);
+                Intent intent1 = new Intent(view.getContext(), OldSignature.class);
+                startActivity(intent1);
 
             }
         });
@@ -121,6 +122,7 @@ public class activity_sign extends AppCompatActivity {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 byte[] byteArray = byteArrayOutputStream .toByteArray();
+
                 //String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 //                File file = new File("sdcard/Pictures/image.png");
 //                FileOutputStream ostream;
@@ -139,7 +141,7 @@ public class activity_sign extends AppCompatActivity {
                 String encoded = Base64.encodeToString(
                         byteArray, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
                 sendRequest(encoded,token);
-                //writeToFile(encoded,activity_sign.this);
+                finish();
             }
         });
         undo.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +151,6 @@ public class activity_sign extends AppCompatActivity {
                 drawableView.clear();
             }
         });
-
 
     }
     private void sendRequest(String encoded,String token) {
@@ -207,15 +208,48 @@ public class activity_sign extends AppCompatActivity {
 
         queue.add(putRequest);
     }
-    private void writeToFile(String data, Context context) {
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("config.txt", Context.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
 
+    public void checkForOldSignature(String url, String token)  {
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        System.out.println(url);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            JSONObject pdfraw = null;
+            @Override
+            public void onResponse(JSONObject response) {
+                pdfraw = response;
+                System.out.println("response");
+                System.out.println(response);
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //error.printStackTrace();
+
+                        showOld.setClickable(false);
+                        showOld.setAlpha(.5f);
+                        }
+
+
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<String, String>();
+
+                //headers.put("Content-Type", "application/json");
+                headers.put("Authorization", "Bearer " + token);
+                System.out.println(headers.toString());
+                return headers;
+            }
+        };
+        queue.add(request);
+
+    }
 }
+
+
+
+
+

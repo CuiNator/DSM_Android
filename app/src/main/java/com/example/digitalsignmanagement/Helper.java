@@ -33,6 +33,13 @@ public final class Helper {
         editor.putString("userId",id);
         editor.commit();
     }
+
+    public static void insertUserId(Context context, String id){
+        SharedPreferences.Editor editor=getPrefs(context).edit();
+        editor.putString("userId",id);
+        editor.commit();
+    }
+
     public static String retriveUserName(Context context){
         String data = getPrefs(context).getString("userName","no_data_found");
         return data;}
