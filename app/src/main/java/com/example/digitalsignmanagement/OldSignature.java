@@ -48,6 +48,7 @@ public class OldSignature extends AppCompatActivity {
         String userId = Helper.retriveUserId(this);
         String docId = Helper.retriveDocId(this);
         String DocName = Helper.retriveDocName(this);
+
         String preferenceURL = Helper.retriveData(this, "url");
         String urlOldSignature = preferenceURL;
         urlOldSignature = urlOldSignature +"/signers/"+ userId +"/documents/"+ docId +"/lastSignature";
@@ -67,7 +68,7 @@ public class OldSignature extends AppCompatActivity {
                         base64b, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
                 RequestQueue queue = Volley.newRequestQueue(OldSignature.this);
 
-                final JSONObject jsonObject = new JSONObject();
+                JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put("signature", encoded);
                     System.out.println(jsonObject.toString());
@@ -145,9 +146,6 @@ public class OldSignature extends AppCompatActivity {
                     base64b = java.util.Base64.getDecoder().decode(base64);
                     System.out.println(Arrays.toString(base64b));
                     System.out.println(base64);
-                    base64b = java.util.Base64.getDecoder().decode(base64);
-                    System.out.println(Arrays.toString(base64b));
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
