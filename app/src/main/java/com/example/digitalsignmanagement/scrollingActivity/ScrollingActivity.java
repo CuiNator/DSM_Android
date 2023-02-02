@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -51,17 +52,18 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     private DocAdapter adapter;
     private String url;
     private Button filter;
+    private String token;
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         preferenceURL = Helper.retriveData(this, "url");
         String name = Helper.retriveUserName(this);
-        String token = Helper.retriveToken(this);
+        token = Helper.retriveToken(this);
         String id = Helper.retriveUserId(this);
 //        System.out.println("HierInScrolling");
 //        System.out.println(name + token + id);
         url = preferenceURL + "/signers/"+id+"/documents";
-//        filter = findViewById(R.id.filter);
+        filter = (Button) findViewById(R.id.filter);
 //        filter.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
 //            final MenuItem item = menu.add("item-text");
 //            item.setOnMenuItemClickListener(i -> {
@@ -71,13 +73,9 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
 //            final MenuItem anotherItem = menu.add("another-item");
 //            anotherItem.setOnMenuItemClickListener(i -> doOtherWorkOnItemClick());
 //        });
-        //filter.setOnClickListener(View::showContextMenu);
-
-
-
-        //filter.setOnClickListener((View.OnClickListener) this);
+//        filter.setOnClickListener(View::showContextMenu);
         try {
-            ArrayList<Document> documents = getDocument(url,token);
+            getDocument(url,token,"active");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -89,8 +87,6 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         loggedUser.setText("Current user: " + name);
 
         System.out.println(preferenceURL);
-
-
 
         this.sign = (RecyclerView) findViewById(R.id.unterschrifen);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -120,14 +116,18 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
 //        }
 //    }
 
-    private ArrayList<Document> getDocument(String url,String token) throws JSONException {
+    private void getDocument(String url,String token, String status) throws JSONException {
 
-        JSONObject ka= new JSONObject();
-        ka.put("status","active");
-        JSONArray body = new JSONArray();
-        body.put(ka);
-        System.out.println(body.toString());
-        System.out.println("Breakpoint");
+//        JSONObject ka= new JSONObject();
+//        ka.put("status","active");
+//        JSONArray body = new JSONArray();
+//        body.put(ka);
+//        System.out.println(body.toString());
+//        System.out.println("Breakpoint");
+        if (!Objects.equals(status, "all")) {
+            url = url + "?status=" + status;
+            System.out.println(url);
+        }
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest request = new JsonArrayRequest (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
@@ -163,13 +163,13 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
 
                 })
         {
-            @Override
-            public Map<String, String> getParams() {
-                System.out.println("DaRein");
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("status","active");
-                return params;
-            }
+//            @Override
+//            public Map<String, String> getParams() {
+//                System.out.println("DaRein");
+//                Map<String,String> params = new HashMap<String, String>();
+//                params.put("status","active");
+//                return params;
+//            }
             @Override
             public Map<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -181,17 +181,39 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         };
         System.out.println("Ausgabe ist: "+ documentList);
         queue.add(request);
-        return documentList;
 
     }
 
     @Override
     public void onClick(View v) {
 
-    }
-    public void doWorkOnItemClick(){}
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.select_dialog_singlechoice);
+        arrayAdapter.add("Active");
+        arrayAdapter.add("Archived");
+        arrayAdapter.add("Full");
+        arrayAdapter.add("Completed");
+        arrayAdapter.add("Canceled");
+        arrayAdapter.add("All");
 
-    public boolean doOtherWorkOnItemClick(){
-        return true;
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(v.getContext());
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String strName = arrayAdapter.getItem(which);
+
+                    strName = strName.toLowerCase();
+                    System.out.println(strName);
+                    System.out.println(url);
+
+                    try {
+                        getDocument(url, token, strName);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                Toast.makeText(getApplicationContext(), strName, Toast.LENGTH_LONG).show();
+            }
+        });
+        builderSingle.setTitle("Select documents to show");
+        builderSingle.show();
     }
 }

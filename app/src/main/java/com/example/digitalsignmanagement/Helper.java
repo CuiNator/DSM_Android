@@ -64,4 +64,15 @@ public final class Helper {
     public static String retriveDocName(Context context){
         String data = getPrefs(context).getString("docName","no_data_found");
         return data;}
+
+    public static void insertBitmap(Context context, String bytearray) {
+        SharedPreferences.Editor editor = getPrefs(context).edit();
+        editor.putString("bitmap", bytearray);
+        editor.commit();
+    }
+
+        public static String retriveBitmap(Context context){
+            String data = getPrefs(context).getString("bitmap","no_data_found");
+            return data;
+        }
 }

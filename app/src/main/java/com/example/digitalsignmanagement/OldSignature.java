@@ -2,6 +2,7 @@ package com.example.digitalsignmanagement;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.databinding.ActivityOldSignatureBinding;
+import com.example.digitalsignmanagement.scrollingActivity.ScrollingActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,18 +56,15 @@ public class OldSignature extends AppCompatActivity {
         getOldSignature(urlOldSignature,token);
 
         submit.setOnClickListener(new View.OnClickListener(){
-
-
             @Override
             public void onClick(View v) {
                 View content = oldSign;
-                bitmap = content.getDrawingCache();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream .toByteArray();
-
+                String oldBitmap = Helper.retriveBitmap(OldSignature.this);
+                System.out.println("OldBitmap");
+                System.out.println(oldBitmap);
+                byte[] base64b = java.util.Base64.getDecoder().decode(oldBitmap);
                 String encoded = Base64.encodeToString(
-                        byteArray, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
+                        base64b, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
                 RequestQueue queue = Volley.newRequestQueue(OldSignature.this);
 
                 final JSONObject jsonObject = new JSONObject();
@@ -83,7 +82,8 @@ public class OldSignature extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONObject response) {
                                 // response
-                                Log.d("Response", response.toString());
+                                Log.d("Response", response.toString()+"yes");
+                                finish();
                             }
                         },
                         new Response.ErrorListener()
@@ -119,8 +119,11 @@ public class OldSignature extends AppCompatActivity {
                 };
 
                 queue.add(putRequest);
+                Intent intent1 = new Intent(OldSignature.this, ScrollingActivity.class);
+                startActivity(intent1);
             }
         });
+
     }
 
 
@@ -139,6 +142,8 @@ public class OldSignature extends AppCompatActivity {
                 byte[] base64b = null;
                 try {
                     base64 = pdfraw.getString("signature");
+                    base64b = java.util.Base64.getDecoder().decode(base64);
+                    System.out.println(Arrays.toString(base64b));
                     System.out.println(base64);
                     base64b = java.util.Base64.getDecoder().decode(base64);
                     System.out.println(Arrays.toString(base64b));
@@ -146,6 +151,7 @@ public class OldSignature extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                Helper.insertBitmap(OldSignature.this,base64);
                 InputStream inputStream  = new ByteArrayInputStream(base64b);
                 bitmap  = BitmapFactory.decodeStream(inputStream);
                 oldSign.setImageBitmap(bitmap);

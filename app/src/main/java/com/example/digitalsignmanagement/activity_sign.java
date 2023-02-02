@@ -122,6 +122,7 @@ public class activity_sign extends AppCompatActivity {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 byte[] byteArray = byteArrayOutputStream .toByteArray();
+                System.out.println(urlRaw);
 
                 //String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
 //                File file = new File("sdcard/Pictures/image.png");
