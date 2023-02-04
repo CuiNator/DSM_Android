@@ -57,7 +57,7 @@
             android:exported="true"
             android:screenOrientation="landscape">
 
-            <!-- Erzwungene orientierung im Landscape-Modus -->
+            <!-- Forces orientation into landscape-mode -->
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
