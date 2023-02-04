@@ -1,8 +1,6 @@
 package com.example.digitalsignmanagement;
 
 
-
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,6 +9,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,8 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,22 +31,20 @@ import java.util.Map;
 import me.panavtec.drawableview.DrawableView;
 import me.panavtec.drawableview.DrawableViewConfig;
 
+//Class to draw a signature and send it to backend
 public class activity_sign extends AppCompatActivity {
 
     DrawableView drawableView;
     DrawableViewConfig config;
-    Button showOld, decrease, save, undo;
+    Button showOld, save, undo;
     private String urlRaw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign);
-
         // initialise the value
         initializelayout();
-
-
     }
 
     private void initializelayout() {
@@ -57,14 +52,14 @@ public class activity_sign extends AppCompatActivity {
         // initialise the layout
         drawableView = findViewById(R.id.paintView);
         showOld = findViewById(R.id.showOld);
-        decrease = findViewById(R.id.decrease);
         save = findViewById(R.id.Save);
-        undo = findViewById(R.id.undo);
+        undo = findViewById(R.id.clear);
         config = new DrawableViewConfig();
         String token = Helper.retriveToken(this);
         String userId = Helper.retriveUserId(this);
         String docId = Helper.retriveDocId(this);
         String DocName = Helper.retriveDocName(this);
+        //Preparation of 2 urls, one for getting the old Signature, the other for sending the current signature
         String preferenceURL = Helper.retriveData(this, "url");
         String urlOldSignature = preferenceURL;
         urlOldSignature = urlOldSignature +"/signers/"+ userId +"/documents/"+ docId +"/lastSignature";
@@ -96,20 +91,11 @@ public class activity_sign extends AppCompatActivity {
         // set canvas width
         config.setCanvasWidth(width);
         drawableView.setConfig(config);
-        String finalUrlOldSignature = urlOldSignature;
         showOld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent1 = new Intent(view.getContext(), OldSignature.class);
                 startActivity(intent1);
-
-            }
-        });
-        decrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // decrease stroke width by 10
-                config.setStrokeWidth(config.getStrokeWidth() - 10);
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
@@ -122,23 +108,6 @@ public class activity_sign extends AppCompatActivity {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 byte[] byteArray = byteArrayOutputStream .toByteArray();
-                System.out.println(urlRaw);
-
-                //String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-//                File file = new File("sdcard/Pictures/image.png");
-//                FileOutputStream ostream;
-//                try {
-//                    file.createNewFile();
-//                    ostream = new FileOutputStream(file);
-//                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
-//                    ostream.flush();
-//                    ostream.close();
-//                    Toast.makeText(getApplicationContext(), "image saved", 5000).show();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(getApplicationContext(), "error", 5000).show();
-//                }
-
                 String encoded = Base64.encodeToString(
                         byteArray, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
                 sendRequest(encoded,token);
@@ -148,7 +117,7 @@ public class activity_sign extends AppCompatActivity {
         undo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // undo the most recent changes
+                // clears the drawableView
                 drawableView.clear();
             }
         });
@@ -160,19 +129,17 @@ public class activity_sign extends AppCompatActivity {
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("signature", encoded);
-            System.out.println(jsonObject.toString());
         } catch (JSONException e) {
-            System.out.println(e.getMessage());
         }
 
 
-        JsonObjectRequest putRequest = new JsonObjectRequest(Request.Method.PUT, urlRaw, jsonObject,
+        JsonObjectRequest putRequest = new JsonObjectRequest(Request.Method.PUT, urlRaw, null,
                 new Response.Listener<JSONObject>()
                 {
                     @Override
                     public void onResponse(JSONObject response) {
                         // response
-                        Log.d("Response", response.toString());
+                        Toast.makeText(getApplicationContext(), "Signature saved", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener()
@@ -180,7 +147,8 @@ public class activity_sign extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        Log.d("Error.Response", error.toString());
+                        error.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Signature already set", Toast.LENGTH_SHORT).show();
                     }
                 }
         ) {
@@ -196,7 +164,6 @@ public class activity_sign extends AppCompatActivity {
 
             @Override
             public byte[] getBody() {
-
                 try {
                     Log.i("json", jsonObject.toString());
                     return jsonObject.toString().getBytes("UTF-8");
@@ -206,29 +173,23 @@ public class activity_sign extends AppCompatActivity {
                 return null;
             }
         };
-
         queue.add(putRequest);
     }
 
+    //send a call for an old signature. If the call fails, the button gets disabled
     public void checkForOldSignature(String url, String token)  {
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        System.out.println(url);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             JSONObject pdfraw = null;
             @Override
             public void onResponse(JSONObject response) {
                 pdfraw = response;
-                System.out.println("response");
-                System.out.println(response);
-
             }
         },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //error.printStackTrace();
-
                         showOld.setClickable(false);
                         showOld.setAlpha(.5f);
                         }
@@ -238,15 +199,11 @@ public class activity_sign extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<String, String>();
-
-                //headers.put("Content-Type", "application/json");
                 headers.put("Authorization", "Bearer " + token);
-                System.out.println(headers.toString());
                 return headers;
             }
         };
         queue.add(request);
-
     }
 }
 

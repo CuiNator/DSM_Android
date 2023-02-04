@@ -1,5 +1,6 @@
 package com.example.digitalsignmanagement.scrollingActivity;
 
+//POJO-class to safe the external signers retried from the backend and to be displayed in the scrolling view
 public class ExternalSigners {
     private long personId;
     private String name;

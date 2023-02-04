@@ -2,6 +2,7 @@ package com.example.digitalsignmanagement.scrollingActivity;
 
 import java.util.Date;
 
+//POJO-class to safe the documents retried from the backend and to be displayed in the scrolling view
 public class Document {
 
     private long documentId;
@@ -24,8 +25,6 @@ public class Document {
         this.externalSigners= externalSigners;
         this.receivedSignatures = receivedSignatures;
         this.maxSigns= maxSigns;
-
-
     }
 
     public long getDocumentId() {

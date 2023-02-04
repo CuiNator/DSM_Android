@@ -22,19 +22,7 @@
             android:text="Show old"
             android:visibility="visible"
             app:layout_constraintEnd_toStartOf="@+id/Save"
-            app:layout_constraintStart_toEndOf="@+id/undo"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/decrease"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="120dp"
-            android:layout_marginEnd="120dp"
-            android:text="-"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@+id/Save"
-            app:layout_constraintStart_toEndOf="@+id/showOld"
+            app:layout_constraintStart_toEndOf="@+id/clear"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
@@ -47,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/undo"
+            android:id="@+id/clear"
             android:layout_width="128dp"
             android:layout_height="48dp"
             android:layout_marginStart="64dp"

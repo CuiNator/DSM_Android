@@ -13,13 +13,13 @@
         android:layout_height="0dp"
         android:fitsSystemWindows="true"
         android:theme="@style/Theme.DigitalSignManagement.AppBarOverlay"
-        app:layout_constraintBottom_toTopOf="@+id/unterschrifen"
+        app:layout_constraintBottom_toTopOf="@+id/documents"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/User"
+            android:id="@+id/user"
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:clickable="false"
@@ -39,10 +39,10 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:title="Documents to sign"
-            app:toolbarId="@+id/toolbar">
+            app:toolbarId="@+id/titleScrollingView">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/titleScrollingView"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
@@ -54,7 +54,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/unterschrifen"
+        android:id="@+id/documents"
         android:layout_width="match_parent"
         android:layout_height="560dp"
         android:layout_marginStart="4dp"

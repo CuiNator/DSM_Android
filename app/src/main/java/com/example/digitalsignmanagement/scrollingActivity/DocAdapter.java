@@ -55,7 +55,6 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
 
     public void setDocument(ArrayList<Document> documents){
-        this.documents = new ArrayList<>();
         this.documents = documents;
     }
 
@@ -68,7 +67,6 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        System.out.println("Click");
         holder.bind(documents.get(position));
 
     }
@@ -106,32 +104,29 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             super(view);
             this.view = view;
             name = view.findViewById(R.id.name);
-            ersteller = view.findViewById(R.id.ersteller);
-            datum = view.findViewById(R.id.datum);
+            ersteller = view.findViewById(R.id.creator);
+            datum = view.findViewById(R.id.date);
             status = view.findViewById(R.id.status);
-            intern = view.findViewById(R.id.itemSign);
+            intern = view.findViewById(R.id.signSelf);
             intern.setOnClickListener(this);
             extern = view.findViewById(R.id.signExtern);
             extern.setOnClickListener(this);
             pdf = view.findViewById(R.id.pdf);
             pdf.setOnClickListener(this);
             id = view.findViewById(R.id.docId);
-            gezeichnet = view.findViewById(R.id.gezeichnet);
+            gezeichnet = view.findViewById(R.id.singed);
             filter = view.findViewById(R.id.filter);
-
         }
 
         void bind(final Document document) {
             name.setText(document.getName());
             ersteller.setText(document.getCreatorName());
-
             SimpleDateFormat formatter = new SimpleDateFormat(
                     "dd/MM/yyyy");
             datum.setText(formatter.format(document.getCreationDate()));
             status.setText(document.getStatus());
-
-            String anzahl = document.getReceivedSignatures() + "/" + document.getMaxSigns();
-            gezeichnet.setText(anzahl);
+            String count = document.getReceivedSignatures() + "/" + document.getMaxSigns();
+            gezeichnet.setText(count);
             if (document.getMaxSigns() == document.getReceivedSignatures()) {
                 intern.setClickable(false);
                 intern.setAlpha(.5f);
@@ -159,7 +154,6 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                 }
             }
 
-
             if (v.getId() == intern.getId()) {
                 System.out.println("Button pressed " + this.name.getText().toString());
                 Context context = view.getContext();
@@ -167,7 +161,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                 Intent intent1 = new Intent(v.getContext(), activity_sign.class);
                 context.startActivity(intent1);
             }
-
+            //Loads the ExternalSigners array into a alert dialog and displays it
             if (v.getId() == extern.getId()) {
                 String docId = this.id.getText().toString();
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(v.getContext());
@@ -177,12 +171,6 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                 for (int i = 0; i < externalSigners.length; i++) {
                     arrayAdapter.add(externalSigners[i].getName());
                 }
-//                arrayAdapter.add("Hardik");
-//                arrayAdapter.add("Archit");
-//                arrayAdapter.add("Jignesh");
-//                arrayAdapter.add("Umang");
-//                arrayAdapter.add("Gatti");
-
                 builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -206,24 +194,11 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                         Helper.insertUserId(context,persId);
                         Intent intent1 = new Intent(v.getContext(), activity_sign.class);
                         context.startActivity(intent1);
-
-//                        builderInner.setMessage(strName);
-//                        builderInner.setTitle("Your Selected Item is");
-//                        builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog,int which) {
-//                                dialog.dismiss();
-//                            }
-//                        });
-//                        builderInner.show();
                     }
                 });
                 builderSingle.show();
-
-
             }
         }
-
         //PDF anzeigen lassen
         private void getPDF() throws JSONException {
 
@@ -238,29 +213,19 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                 @Override
                 public void onResponse(JSONObject response) {
                     pdfraw = response;
-                    System.out.println("response");
-                    System.out.println(response);
-                    String base64 = null;
+                    String base64;
                     byte[] base64b = null;
                     try {
                         base64 = pdfraw.getString("pdf");
                         System.out.println(base64);
                         base64b = Base64.getDecoder().decode(base64);
-//                        pdfb = base64.getBytes();
-//                        System.out.println(Arrays.toString(pdfb));
-//                        System.out.println(pdfb);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-//                    String filename = "sdcard/documents";
-//                    FileOutputStream output = new FileOutputStream(filename);
-//                    output.write();
-
                     OutputStream out = null;
                     try {
-                        out = new FileOutputStream("sdcard/Documents/test2.pdf",false);
-                        //out = new FileOutputStream(context.getFilesDir()+"temp.pdf");
+                        out = new FileOutputStream("sdcard/Documents/temp.pdf",false);
                         out.write(base64b);
                         out.close();
                     } catch (FileNotFoundException e) {
@@ -271,7 +236,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
                     StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                     StrictMode.setVmPolicy(builder.build());
-                    File file = new File("sdcard/Documents/test2.pdf");
+                    File file = new File("sdcard/Documents/temp.pdf");
                     Intent target = new Intent(Intent.ACTION_VIEW);
                     target.setDataAndType(Uri.fromFile(file),"application/pdf");
                     target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -283,47 +248,24 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                         // Instruct the user to install a PDF reader here, or something
                         System.out.println("Downloade nen PDF Reader");
                     }
-
-//                    File file = new File("sdcard/Documents/test2.pdf");
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                    context.startActivity(intent);
-
-
-
-
-//                    File mFile = new File("sdcard/documents/document3.txt");
-//                    try {
-//                        FileUtils.writeByteArrayToFile(mFile, pdfb);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
                 }
             },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             error.printStackTrace();
-                            System.out.println(error.toString());
-                            Toast.makeText(context.getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context.getApplicationContext(), "Error opening PDF", Toast.LENGTH_SHORT).show();
                         }
-
                     }) {
                 @Override
                 public Map<String, String> getHeaders() {
                     HashMap<String, String> headers = new HashMap<String, String>();
-
-                    //headers.put("Content-Type", "application/json");
                     headers.put("Authorization", "Bearer " + token);
-                    System.out.println(headers.toString());
                     return headers;
                 }
             };
             queue.add(request);
-
         }
-
     }}
 
 

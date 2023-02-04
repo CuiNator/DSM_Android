@@ -28,14 +28,12 @@ import com.example.digitalsignmanagement.scrollingActivity.ScrollingActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Base64;
-
 public class LoginActivity extends AppCompatActivity {
 
 
     private ActivityLoginBinding binding;
-    String preferenceURL;
-    String savedInput;
+    private String preferenceURL;
+    private String savedInput;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,28 +68,18 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                System.out.println(data);
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, loginURL, data, new Response.Listener<JSONObject>() {
                     JSONObject personInfo = null;
-
                     @Override
                     public void onResponse(JSONObject response) {
                         personInfo = response;
-                        System.out.println(response);
-                        System.out.println(personInfo.toString());
-
-                        //Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
-
                         try {
                             String name = personInfo.getString("name");
                             String token = personInfo.getString("token");
                             String id = personInfo.getString("id");
-                            System.out.println(name +" "+ token +" "+id);
                             Helper.insertUserData(LoginActivity.this,name,token,id);
                         } catch (JSONException e) {
                             e.printStackTrace();
-
-
                         }
                         Intent intent1 = new Intent(LoginActivity.this, ScrollingActivity.class);
                         startActivity(intent1);
@@ -103,38 +91,32 @@ public class LoginActivity extends AppCompatActivity {
                                 error.printStackTrace();
                                 Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
                             }
-
                         });
                 queue.add(request);
             }
         });
     }
-
+    //Creates menu for changing the connection URL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_url, menu);
         return true;
     }
+    //Reads in the connection URL and safes it with the Helper-class
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.url:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Edit connection");
-
-// Set up the input
                 final EditText input = new EditText(this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
                 input.setText(preferenceURL);
                 builder.setView(input);
-
-// Set up the buttons
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         savedInput = input.getText().toString();
-                        System.out.println(savedInput);
                         Helper.insertData(LoginActivity.this, "url", savedInput);
                     }
                 });

@@ -1,20 +1,11 @@
 package com.example.digitalsignmanagement.scrollingActivity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,17 +22,14 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
-import com.example.digitalsignmanagement.ui.login.LoginActivity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -62,20 +50,9 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         String name = Helper.retriveUserName(this);
         token = Helper.retriveToken(this);
         String id = Helper.retriveUserId(this);
-//        System.out.println("HierInScrolling");
-//        System.out.println(name + token + id);
         url = preferenceURL + "/signers/"+id+"/documents";
         filter = (Button) findViewById(R.id.filter);
-//        filter.setOnCreateContextMenuListener((menu, v, menuInfo) -> {
-//            final MenuItem item = menu.add("item-text");
-//            item.setOnMenuItemClickListener(i -> {
-//                doWorkOnItemClick();
-//                return true; // Signifies you have consumed this event, so propogation can stop.
-//            });
-//            final MenuItem anotherItem = menu.add("another-item");
-//            anotherItem.setOnMenuItemClickListener(i -> doOtherWorkOnItemClick());
-//        });
-//        filter.setOnClickListener(View::showContextMenu);
+        //On activity start get only active documents
         try {
             getDocument(url,token,"active");
         } catch (JSONException e) {
@@ -85,15 +62,12 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         adapter= new DocAdapter(ScrollingActivity.this, documentList);
 
         setContentView(R.layout.activity_scrolling);
-        loggedUser = findViewById(R.id.User);
+        loggedUser = findViewById(R.id.user);
         loggedUser.setText("Current user: " + name);
 
-        System.out.println(preferenceURL);
-
-        this.sign = (RecyclerView) findViewById(R.id.unterschrifen);
+        this.sign = (RecyclerView) findViewById(R.id.documents);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         this.sign.setLayoutManager(mLayoutManager);
-        //registerForContextMenu(this.filter);
     }
 
 
@@ -128,20 +102,15 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
 //        System.out.println("Breakpoint");
         if (!Objects.equals(status, "all")) {
             url = url + "?status=" + status;
-            System.out.println(url);
         }
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest request = new JsonArrayRequest (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
             @Override
             public void onResponse(JSONArray  response) {
-                System.out.println("response Signer");
-                System.out.println(response);
                 ObjectMapper objectMapper = new ObjectMapper();
                 try {
                     ArrayList<Document> docList = objectMapper.readValue(String.valueOf(response), objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, Document.class));
-                    System.out.println(docList);
-
                     documentList = docList;
                     adapter.setDocument(documentList);
                     ScrollingActivity.this.sign.setAdapter(adapter);
@@ -151,16 +120,13 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                Toast.makeText(getApplicationContext(), "Yes" + response.toString(), Toast.LENGTH_LONG).show();
             }
         },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
-                        System.out.println(error.toString());
-                        Toast.makeText(getApplicationContext(), "No", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error retrieving Documents", Toast.LENGTH_SHORT).show();
                     }
 
                 })
@@ -175,17 +141,14 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
             @Override
             public Map<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                //headers.put("Content-Type", "application/json");
                 headers.put("Authorization","Bearer "+ token);
-                System.out.println(headers.toString());
                 return headers;
             }
         };
-        System.out.println("Ausgabe ist: "+ documentList);
         queue.add(request);
 
     }
-
+    //Logic for the filter button
     @Override
     public void onClick(View v) {
 
@@ -204,9 +167,6 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                 String strName = arrayAdapter.getItem(which);
 
                     strName = strName.toLowerCase();
-                    System.out.println(strName);
-                    System.out.println(url);
-
                     try {
                         getDocument(url, token, strName);
                     } catch (JSONException e) {
