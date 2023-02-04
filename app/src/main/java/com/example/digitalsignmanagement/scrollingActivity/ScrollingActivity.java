@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-
+// Window which shows our RecyclerView
 public class ScrollingActivity extends AppCompatActivity implements View.OnClickListener {
     private RecyclerView sign;
     private String preferenceURL;
@@ -71,35 +71,10 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
-//        super.onCreateContextMenu(menu, v,menuInfo);
-//
-//        getMenuInflater().inflate(R.menu.context_menu,menu);
-//
-//    }
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.active:
-//                Toast.makeText(this, "Option 1 selected", Toast.LENGTH_SHORT).show();
-//                return true;
-//            case R.id.all:
-//                Toast.makeText(this, "Option 2 selected", Toast.LENGTH_SHORT).show();
-//                return true;
-//            default:
-//                return super.onContextItemSelected(item);
-//        }
-//    }
+
 
     private void getDocument(String url,String token, String status) throws JSONException {
-
-//        JSONObject ka= new JSONObject();
-//        ka.put("status","active");
-//        JSONArray body = new JSONArray();
-//        body.put(ka);
-//        System.out.println(body.toString());
-//        System.out.println("Breakpoint");
+        //If "all" is selected the call uses the vanilla url which returns all documents
         if (!Objects.equals(status, "all")) {
             url = url + "?status=" + status;
         }
@@ -131,13 +106,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
 
                 })
         {
-//            @Override
-//            public Map<String, String> getParams() {
-//                System.out.println("DaRein");
-//                Map<String,String> params = new HashMap<String, String>();
-//                params.put("status","active");
-//                return params;
-//            }
+
             @Override
             public Map<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<String, String>();

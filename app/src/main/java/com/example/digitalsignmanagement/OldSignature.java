@@ -28,7 +28,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-
+//Class which shows the old signature, if one exists
 public class OldSignature extends AppCompatActivity {
 
     Button submit;

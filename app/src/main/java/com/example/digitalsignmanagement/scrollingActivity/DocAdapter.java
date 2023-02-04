@@ -42,6 +42,8 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+
+//Adapter for the single objects in our RecyclerView
 public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
     private Context context;
@@ -155,7 +157,6 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             }
 
             if (v.getId() == intern.getId()) {
-                System.out.println("Button pressed " + this.name.getText().toString());
                 Context context = view.getContext();
                 Helper.insertDocData(context, this.name.getText().toString(), this.id.getText().toString());
                 Intent intent1 = new Intent(v.getContext(), activity_sign.class);
@@ -187,7 +188,6 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                         for (int i = 0; i < externalSigners.length; i++) {
                             if (strName == externalSigners[i].getName()) {
                                 persId = String.valueOf(externalSigners[i].getPersonId());
-                                System.out.println(persId);
                             }
                         }
                         Helper.insertDocData(context, strName, docId);
@@ -207,7 +207,6 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             String token = Helper.retriveToken(this.view.getContext());
 
             RequestQueue queue = Volley.newRequestQueue(this.view.getContext());
-            System.out.println(url);
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                 JSONObject pdfraw = null;
                 @Override
@@ -217,7 +216,6 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                     byte[] base64b = null;
                     try {
                         base64 = pdfraw.getString("pdf");
-                        System.out.println(base64);
                         base64b = Base64.getDecoder().decode(base64);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -246,7 +244,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                         context.startActivity(intent);
                     } catch (ActivityNotFoundException e) {
                         // Instruct the user to install a PDF reader here, or something
-                        System.out.println("Downloade nen PDF Reader");
+                        Toast.makeText(context.getApplicationContext(), "No PDF Reader found", Toast.LENGTH_SHORT).show();
                     }
                 }
             },
