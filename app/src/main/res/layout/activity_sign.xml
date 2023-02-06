@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity_sign">
+    tools:context=".signActivies.activity_sign">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
@@ -30,7 +30,7 @@
             android:layout_width="128dp"
             android:layout_height="48dp"
             android:layout_marginEnd="64dp"
-            android:text="Save"
+            android:text="Submit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

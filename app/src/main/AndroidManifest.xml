@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".OldSignature"
+            android:name=".signActivies.OldSignature"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -53,7 +53,7 @@
             android:value="" />
 
         <activity
-            android:name=".activity_sign"
+            android:name=".signActivies.activity_sign"
             android:exported="true"
             android:screenOrientation="landscape">
 

@@ -118,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         savedInput = input.getText().toString();
                         Helper.insertData(LoginActivity.this, "url", savedInput);
+                        preferenceURL = savedInput;
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
