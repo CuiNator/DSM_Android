@@ -26,7 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
-import com.example.digitalsignmanagement.signActivies.activity_sign;
+import com.example.digitalsignmanagement.signActivies.SignActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -159,7 +159,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             if (v.getId() == intern.getId()) {
                 Context context = view.getContext();
                 Helper.insertDocData(context, this.name.getText().toString(), this.id.getText().toString());
-                Intent intent1 = new Intent(v.getContext(), activity_sign.class);
+                Intent intent1 = new Intent(v.getContext(), SignActivity.class);
                 context.startActivity(intent1);
             }
             //Loads the ExternalSigners array into a alert dialog and displays it
@@ -192,7 +192,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                         }
                         Helper.insertDocData(context, strName, docId);
                         Helper.insertUserId(context,persId);
-                        Intent intent1 = new Intent(v.getContext(), activity_sign.class);
+                        Intent intent1 = new Intent(v.getContext(), SignActivity.class);
                         context.startActivity(intent1);
                     }
                 });
@@ -202,7 +202,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
         //PDF anzeigen lassen
         private void getPDF() throws JSONException {
 
-            url = Helper.retriveData(this.view.getContext(), "url");
+            url = Helper.retriveConnectionData(this.view.getContext(), "url");
             url = url + "/signers/" + Helper.retriveUserId(this.view.getContext()) + "/documents/" + this.id.getText().toString();
             String token = Helper.retriveToken(this.view.getContext());
 

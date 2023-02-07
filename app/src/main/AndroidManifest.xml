@@ -53,7 +53,7 @@
             android:value="" />
 
         <activity
-            android:name=".signActivies.activity_sign"
+            android:name=".signActivies.SignActivity"
             android:exported="true"
             android:screenOrientation="landscape">
 

@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText eMailEditText = binding.email;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
-        preferenceURL=Helper.retriveData(this,"url");
+        preferenceURL=Helper.retriveConnectionData(this,"url");
         eMailEditText.setText("email@email.de");
         passwordEditText.setText("Password");
 
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = eMailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                String loginURL = Helper.retriveData(LoginActivity.this, "url") + "/login";
+                String loginURL = Helper.retriveConnectionData(LoginActivity.this, "url") + "/login";
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
 
                 JSONObject data = null;
@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         savedInput = input.getText().toString();
-                        Helper.insertData(LoginActivity.this, "url", savedInput);
+                        Helper.insertConnectionData(LoginActivity.this, "url", savedInput);
                         preferenceURL = savedInput;
                     }
                 });

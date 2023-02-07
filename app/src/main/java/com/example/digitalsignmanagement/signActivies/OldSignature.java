@@ -46,10 +46,10 @@ public class OldSignature extends AppCompatActivity {
         String token = Helper.retriveToken(this);
         String userId = Helper.retriveUserId(this);
         String docId = Helper.retriveDocId(this);
-        String preferenceURL = Helper.retriveData(this, "url");
+        String preferenceURL = Helper.retriveConnectionData(this, "url");
         String urlOldSignature = preferenceURL;
         urlOldSignature = urlOldSignature +"/signers/"+ userId +"/documents/"+ docId +"/lastSignature";
-        String urlRaw = preferenceURL + "/signers/" + userId + "/documents/" + docId;
+        String urlSendSignature = preferenceURL + "/signers/" + userId + "/documents/" + docId;
         getSupportActionBar().setTitle("Old Signature");
         getOldSignature(urlOldSignature,token);
 
@@ -68,7 +68,7 @@ public class OldSignature extends AppCompatActivity {
                 } catch (JSONException e) {
                 }
 
-                JsonObjectRequest putRequest = new JsonObjectRequest(Request.Method.PUT, urlRaw, jsonObject,
+                JsonObjectRequest putRequest = new JsonObjectRequest(Request.Method.PUT, urlSendSignature, jsonObject,
                         new Response.Listener<JSONObject>()
                         {
                             @Override

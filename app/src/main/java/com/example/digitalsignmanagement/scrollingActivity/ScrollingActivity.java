@@ -46,7 +46,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-        preferenceURL = Helper.retriveData(this, "url");
+        preferenceURL = Helper.retriveConnectionData(this, "url");
         String name = Helper.retriveUserName(this);
         token = Helper.retriveToken(this);
         String id = Helper.retriveUserId(this);

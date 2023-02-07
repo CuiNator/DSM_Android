@@ -12,12 +12,12 @@ public final class Helper {
         return  context.getSharedPreferences(url,Context.MODE_PRIVATE);
     }
 
-    public static void insertData(Context context,String key,String value){
+    public static void insertConnectionData(Context context, String key, String value){
         SharedPreferences.Editor editor=getPrefs(context).edit();
         editor.putString(key,value);
         editor.commit();}
 
-    public static String retriveData(Context context,String key){
+    public static String retriveConnectionData(Context context, String key){
 
         String data = getPrefs(context).getString(key,"no_data_found");
         if (data == "no_data_found"){

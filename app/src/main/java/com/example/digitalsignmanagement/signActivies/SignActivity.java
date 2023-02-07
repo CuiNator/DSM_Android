@@ -34,12 +34,12 @@ import me.panavtec.drawableview.DrawableView;
 import me.panavtec.drawableview.DrawableViewConfig;
 
 //Class to draw a signature and send it to backend
-public class activity_sign extends AppCompatActivity {
+public class SignActivity extends AppCompatActivity {
 
     DrawableView drawableView;
     DrawableViewConfig config;
     Button showOld, save, undo;
-    private String urlRaw;
+    private String urlSaveSignature;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +62,10 @@ public class activity_sign extends AppCompatActivity {
         String docId = Helper.retriveDocId(this);
         String DocName = Helper.retriveDocName(this);
         //Preparation of 2 urls, one for getting the old Signature, the other for sending the current signature
-        String preferenceURL = Helper.retriveData(this, "url");
+        String preferenceURL = Helper.retriveConnectionData(this, "url");
         String urlOldSignature = preferenceURL;
+        urlSaveSignature = preferenceURL+"/signers/"+userId+"/documents/"+docId;
         urlOldSignature = urlOldSignature +"/signers/"+ userId +"/documents/"+ docId +"/lastSignature";
-        urlRaw = preferenceURL+"/signers/"+userId+"/documents/"+docId;
         checkForOldSignature(urlOldSignature,token);
 
         getSupportActionBar().setTitle(DocName);
@@ -127,15 +127,12 @@ public class activity_sign extends AppCompatActivity {
     }
     private void sendRequest(String encoded,String token) {
         RequestQueue queue = Volley.newRequestQueue(this);
-
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("signature", encoded);
         } catch (JSONException e) {
         }
-
-
-        JsonObjectRequest putRequest = new JsonObjectRequest(Request.Method.PUT, urlRaw, null,
+        JsonObjectRequest putRequest = new JsonObjectRequest(Request.Method.PUT, urlSaveSignature, null,
                 new Response.Listener<JSONObject>()
                 {
                     @Override
@@ -154,7 +151,6 @@ public class activity_sign extends AppCompatActivity {
                     }
                 }
         ) {
-
             @Override
             public Map<String, String> getHeaders()
             {
@@ -163,7 +159,6 @@ public class activity_sign extends AppCompatActivity {
                 headers.put("Authorization","Bearer "+ token);
                 return headers;
             }
-
             @Override
             public byte[] getBody() {
                 try {
