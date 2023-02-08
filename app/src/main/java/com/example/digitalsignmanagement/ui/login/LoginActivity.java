@@ -47,8 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         final EditText eMailEditText = binding.email;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
-        preferenceURL=Helper.retriveConnectionData(this,"url");
-        eMailEditText.setText("email@email.de");
+        preferenceURL=Helper.retrieveConnectionData(this,"url");
+        eMailEditText.setText(Helper.retrieveLastUser(this));
         passwordEditText.setText("Password");
 
 
@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = eMailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                String loginURL = Helper.retriveConnectionData(LoginActivity.this, "url") + "/login";
+                String loginURL = Helper.retrieveConnectionData(LoginActivity.this, "url") + "/login";
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
 
                 JSONObject data = null;
@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        Helper.insertLastUser(LoginActivity.this, email);
                         Intent intent1 = new Intent(LoginActivity.this, ScrollingActivity.class);
                         startActivity(intent1);
                     }

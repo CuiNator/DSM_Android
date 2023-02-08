@@ -9,6 +9,7 @@ public class Document {
     private Date creationDate;
     private int receivedSignatures;
     private int maxSigns;
+    private boolean selfSigned;
     private String status;
     private String name;
     private String creatorName;
@@ -16,7 +17,7 @@ public class Document {
 
     public Document(){}
 
-    public Document(long documentId, Date creationDate, String status, String documentName, String creator, ExternalSigners externalSigners[],int receivedSignatures, int maxSigns) {
+    public Document(long documentId, Date creationDate, String status, String documentName, String creator, ExternalSigners externalSigners[],int receivedSignatures, int maxSigns, boolean selfSigned) {
         this.documentId = documentId;
         this.creationDate = creationDate;
         this.status = status;
@@ -25,6 +26,7 @@ public class Document {
         this.externalSigners= externalSigners;
         this.receivedSignatures = receivedSignatures;
         this.maxSigns= maxSigns;
+        this.selfSigned = selfSigned;
     }
 
     public long getDocumentId() {
@@ -87,5 +89,13 @@ public class Document {
 
     public void setExternalSigners(ExternalSigners[] externalSigners) {
         this.externalSigners = externalSigners;
+    }
+
+    public boolean isSelfSigned() {
+        return selfSigned;
+    }
+
+    public void setSelfSigned(boolean selfSigned) {
+        this.selfSigned = selfSigned;
     }
 }

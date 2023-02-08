@@ -17,7 +17,7 @@ public final class Helper {
         editor.putString(key,value);
         editor.commit();}
 
-    public static String retriveConnectionData(Context context, String key){
+    public static String retrieveConnectionData(Context context, String key){
 
         String data = getPrefs(context).getString(key,"no_data_found");
         if (data == "no_data_found"){
@@ -38,15 +38,15 @@ public final class Helper {
         editor.putString("userId",id);
         editor.commit();}
 
-    public static String retriveUserName(Context context){
+    public static String retrieveUserName(Context context){
         String data = getPrefs(context).getString("userName","no_data_found");
         return data;}
 
-    public static String retriveToken(Context context){
+    public static String retrieveToken(Context context){
         String data = getPrefs(context).getString("token","no_data_found");
         return data;}
 
-    public static String retriveUserId(Context context){
+    public static String retrieveUserId(Context context){
         String data = getPrefs(context).getString("userId","no_data_found");
         return data;}
 
@@ -56,11 +56,11 @@ public final class Helper {
         editor.putString("docId", docId);
         editor.commit();}
 
-    public static String retriveDocId(Context context){
+    public static String retrieveDocId(Context context){
         String data = getPrefs(context).getString("docId","no_data_found");
         return data;}
 
-    public static String retriveDocName(Context context){
+    public static String retrieveDocName(Context context){
         String data = getPrefs(context).getString("docName","no_data_found");
         return data;}
 
@@ -69,7 +69,16 @@ public final class Helper {
         editor.putString("bitmap", bytearray);
         editor.commit();}
 
-    public static String retriveBitmap(Context context){
+    public static String retrieveBitmap(Context context){
         String data = getPrefs(context).getString("bitmap","no_data_found");
+        return data;}
+
+    public static void insertLastUser(Context context, String lastUser) {
+        SharedPreferences.Editor editor = getPrefs(context).edit();
+        editor.putString("lastUser", lastUser);
+        editor.commit();}
+
+    public static String retrieveLastUser(Context context){
+        String data = getPrefs(context).getString("lastUser","E-Mail");
         return data;}
 }

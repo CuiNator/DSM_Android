@@ -38,8 +38,13 @@ public class SignActivity extends AppCompatActivity {
 
     DrawableView drawableView;
     DrawableViewConfig config;
-    Button showOld, save, undo;
+    Button showOld, save, clear;
     private String urlSaveSignature;
+
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +60,14 @@ public class SignActivity extends AppCompatActivity {
         drawableView = findViewById(R.id.paintView);
         showOld = findViewById(R.id.showOld);
         save = findViewById(R.id.Save);
-        undo = findViewById(R.id.clear);
+        clear = findViewById(R.id.clear);
         config = new DrawableViewConfig();
-        String token = Helper.retriveToken(this);
-        String userId = Helper.retriveUserId(this);
-        String docId = Helper.retriveDocId(this);
-        String DocName = Helper.retriveDocName(this);
+        String token = Helper.retrieveToken(this);
+        String userId = Helper.retrieveUserId(this);
+        String docId = Helper.retrieveDocId(this);
+        String DocName = Helper.retrieveDocName(this);
         //Preparation of 2 urls, one for getting the old Signature, the other for sending the current signature
-        String preferenceURL = Helper.retriveConnectionData(this, "url");
+        String preferenceURL = Helper.retrieveConnectionData(this, "url");
         String urlOldSignature = preferenceURL;
         urlSaveSignature = preferenceURL+"/signers/"+userId+"/documents/"+docId;
         urlOldSignature = urlOldSignature +"/signers/"+ userId +"/documents/"+ docId +"/lastSignature";
@@ -113,17 +118,15 @@ public class SignActivity extends AppCompatActivity {
                 String encoded = Base64.encodeToString(
                         byteArray, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
                 sendRequest(encoded,token);
-                finish();
+
             }
         });
-        undo.setOnClickListener(new View.OnClickListener() {
+        clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // clears the drawableView
                 drawableView.clear();
             }
         });
-
     }
     private void sendRequest(String encoded,String token) {
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -139,6 +142,9 @@ public class SignActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         // response
                         Toast.makeText(getApplicationContext(), "Signature saved", Toast.LENGTH_SHORT).show();
+                        finish();
+//                        Intent refresh = new Intent(this, ScrollingActivity.class);
+//                        startActivity(refresh);
                     }
                 },
                 new Response.ErrorListener()

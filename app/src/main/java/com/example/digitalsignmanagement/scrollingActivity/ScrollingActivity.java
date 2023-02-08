@@ -44,12 +44,21 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     private Button filter;
     private String token;
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        try {
+            getDocument(url,token,"active");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-        preferenceURL = Helper.retriveConnectionData(this, "url");
-        String name = Helper.retriveUserName(this);
-        token = Helper.retriveToken(this);
-        String id = Helper.retriveUserId(this);
+        preferenceURL = Helper.retrieveConnectionData(this, "url");
+        String name = Helper.retrieveUserName(this);
+        token = Helper.retrieveToken(this);
+        String id = Helper.retrieveUserId(this);
         url = preferenceURL + "/signers/"+id+"/documents";
         filter = (Button) findViewById(R.id.filter);
         //On activity start get only active documents
@@ -58,6 +67,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
 
         adapter= new DocAdapter(ScrollingActivity.this, documentList);
 

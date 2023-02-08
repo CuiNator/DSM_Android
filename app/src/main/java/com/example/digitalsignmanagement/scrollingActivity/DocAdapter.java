@@ -56,6 +56,8 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
 
 
+
+
     public void setDocument(ArrayList<Document> documents){
         this.documents = documents;
     }
@@ -100,8 +102,6 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
         public Button filter;
         private String url;
 
-
-
         public ViewHolder(@NonNull View view) {
             super(view);
             this.view = view;
@@ -129,22 +129,32 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             status.setText(document.getStatus());
             String count = document.getReceivedSignatures() + "/" + document.getMaxSigns();
             gezeichnet.setText(count);
-            if (document.getMaxSigns() == document.getReceivedSignatures()) {
+
+            if (document.isSelfSigned()){
                 intern.setClickable(false);
                 intern.setAlpha(.5f);
-                extern.setClickable(false);
-                extern.setAlpha(.5f);
             }
 
             if (document.getExternalSigners().length == 0) {
                 extern.setClickable(false);
                 extern.setAlpha(.5f);
             }
-
+            //Check if all external signatures are set. If yes, the button get disabled
+            int externalSigns=0;
+            for (int i = 0; i < document.getExternalSigners().length; i++) {
+                if (document.getExternalSigners()[i].isSigned()) {
+                    externalSigns++;
+                }
+            }
+            if(externalSigns == document.getExternalSigners().length){
+                extern.setClickable(false);
+                extern.setAlpha(.5f);
+            }
             String docId = String.valueOf(document.getDocumentId());
             id.setText(docId);
             externalSigners = document.getExternalSigners();
         }
+
 
         @Override
         public void onClick(View v) {
@@ -170,7 +180,9 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.select_dialog_singlechoice);
                 for (int i = 0; i < externalSigners.length; i++) {
-                    arrayAdapter.add(externalSigners[i].getName());
+                    if (externalSigners[i].isSigned()== false){
+                        arrayAdapter.add(externalSigners[i].getName());
+                    }
                 }
                 builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -202,9 +214,9 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
         //PDF anzeigen lassen
         private void getPDF() throws JSONException {
 
-            url = Helper.retriveConnectionData(this.view.getContext(), "url");
-            url = url + "/signers/" + Helper.retriveUserId(this.view.getContext()) + "/documents/" + this.id.getText().toString();
-            String token = Helper.retriveToken(this.view.getContext());
+            url = Helper.retrieveConnectionData(this.view.getContext(), "url");
+            url = url + "/signers/" + Helper.retrieveUserId(this.view.getContext()) + "/documents/" + this.id.getText().toString();
+            String token = Helper.retrieveToken(this.view.getContext());
 
             RequestQueue queue = Volley.newRequestQueue(this.view.getContext());
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

@@ -43,10 +43,10 @@ public class OldSignature extends AppCompatActivity {
         setContentView(R.layout.activity_old_signature);
         submit = findViewById(R.id.submit);
         oldSign = findViewById(R.id.oldSignImage);
-        String token = Helper.retriveToken(this);
-        String userId = Helper.retriveUserId(this);
-        String docId = Helper.retriveDocId(this);
-        String preferenceURL = Helper.retriveConnectionData(this, "url");
+        String token = Helper.retrieveToken(this);
+        String userId = Helper.retrieveUserId(this);
+        String docId = Helper.retrieveDocId(this);
+        String preferenceURL = Helper.retrieveConnectionData(this, "url");
         String urlOldSignature = preferenceURL;
         urlOldSignature = urlOldSignature +"/signers/"+ userId +"/documents/"+ docId +"/lastSignature";
         String urlSendSignature = preferenceURL + "/signers/" + userId + "/documents/" + docId;
@@ -56,7 +56,7 @@ public class OldSignature extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                String oldBitmap = Helper.retriveBitmap(OldSignature.this);
+                String oldBitmap = Helper.retrieveBitmap(OldSignature.this);
                 byte[] base64b = java.util.Base64.getDecoder().decode(oldBitmap);
                 String encoded = Base64.encodeToString(
                         base64b, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
@@ -75,7 +75,6 @@ public class OldSignature extends AppCompatActivity {
                             public void onResponse(JSONObject response) {
                                 // response
                                 Log.d("Response", response.toString()+"yes");
-                                finish();
                             }
                         },
                         new Response.ErrorListener()
@@ -110,8 +109,7 @@ public class OldSignature extends AppCompatActivity {
                 };
 
                 queue.add(putRequest);
-                Intent intent1 = new Intent(OldSignature.this, ScrollingActivity.class);
-                startActivity(intent1);
+                finish();
             }
         });
 
