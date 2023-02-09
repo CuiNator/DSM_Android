@@ -212,6 +212,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                 builderSingle.show();
             }
         }
+
         //PDF anzeigen lassen
         private void getPDF() throws JSONException {
 

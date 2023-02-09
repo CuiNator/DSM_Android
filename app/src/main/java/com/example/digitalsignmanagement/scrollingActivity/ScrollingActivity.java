@@ -38,6 +38,7 @@ import java.util.Objects;
 
 // Window which shows our RecyclerView
 public class ScrollingActivity extends AppCompatActivity implements View.OnClickListener {
+    SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView sign;
     private String preferenceURL;
     TextView loggedUser;
