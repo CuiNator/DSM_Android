@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="76dp"
                 android:layout_marginTop="42dp"
-                android:text="Creator"
+                android:text="@string/creator"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="42dp"
                 android:layout_marginEnd="80dp"
-                android:text="Date"
+                android:text="@string/date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -71,7 +71,7 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="48dp"
                 android:layout_marginTop="65dp"
-                android:text="Self"
+                android:text="@string/self"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -94,7 +94,7 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="65dp"
                 android:layout_marginEnd="50dp"
-                android:text="Extern"
+                android:text="@string/extern"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

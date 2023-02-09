@@ -21,6 +21,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
 import com.example.digitalsignmanagement.scrollingActivity.ScrollingActivity;
+import com.example.digitalsignmanagement.ui.login.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +51,7 @@ public class OldSignature extends AppCompatActivity {
         String urlOldSignature = preferenceURL;
         urlOldSignature = urlOldSignature +"/signers/"+ userId +"/documents/"+ docId +"/lastSignature";
         String urlSendSignature = preferenceURL + "/signers/" + userId + "/documents/" + docId;
-        getSupportActionBar().setTitle("Old Signature");
+        getSupportActionBar().setTitle(OldSignature.this.getString(R.string.old_signature));
         getOldSignature(urlOldSignature,token);
 
         submit.setOnClickListener(new View.OnClickListener(){

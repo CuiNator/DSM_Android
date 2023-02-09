@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.url:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Edit connection");
+                builder.setTitle(LoginActivity.this.getString(R.string.url));
                 final EditText input = new EditText(this);
                 input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
                 input.setText(preferenceURL);
@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                         preferenceURL = savedInput;
                     }
                 });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(LoginActivity.this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();

@@ -3,6 +3,7 @@ package com.example.digitalsignmanagement.scrollingActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -22,6 +24,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
+import com.example.digitalsignmanagement.ui.login.LoginActivity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
@@ -43,6 +46,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     private String url;
     private Button filter;
     private String token;
+    private SwipeRefreshLayout swipeContainer;
     @Override
     protected void onRestart() {
         super.onRestart();
@@ -53,32 +57,48 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         }
     }
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferenceURL = Helper.retrieveConnectionData(this, "url");
         String name = Helper.retrieveUserName(this);
         token = Helper.retrieveToken(this);
         String id = Helper.retrieveUserId(this);
-        url = preferenceURL + "/signers/"+id+"/documents";
+        url = preferenceURL + "/signers/" + id + "/documents";
         filter = (Button) findViewById(R.id.filter);
+
+
         //On activity start get only active documents
         try {
-            getDocument(url,token,"active");
+            getDocument(url, token, "active");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.pullToRefresh);
+
+        adapter = new DocAdapter(ScrollingActivity.this, documentList);
+
+//        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                swipeContainer.setRefreshing(false);
+//                try {
+//                    getDocument(url, token, "active");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
 
-        adapter= new DocAdapter(ScrollingActivity.this, documentList);
+            setContentView(R.layout.activity_scrolling);
+            loggedUser = findViewById(R.id.user);
+            loggedUser.setText(name+"      ");
 
-        setContentView(R.layout.activity_scrolling);
-        loggedUser = findViewById(R.id.user);
-        loggedUser.setText("Current user: " + name);
+            this.sign = (RecyclerView) findViewById(R.id.documents);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+            this.sign.setLayoutManager(mLayoutManager);
 
-        this.sign = (RecyclerView) findViewById(R.id.documents);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        this.sign.setLayoutManager(mLayoutManager);
-    }
+        }
 
 
 
@@ -154,7 +174,8 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(getApplicationContext(), strName, Toast.LENGTH_LONG).show();
             }
         });
-        builderSingle.setTitle("Select documents to show");
+        builderSingle.setTitle(ScrollingActivity.this.getString(R.string.filterText));
         builderSingle.show();
     }
+
 }

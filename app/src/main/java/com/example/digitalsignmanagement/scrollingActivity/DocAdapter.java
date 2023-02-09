@@ -27,6 +27,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
 import com.example.digitalsignmanagement.signActivies.SignActivity;
+import com.example.digitalsignmanagement.ui.login.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -176,7 +177,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             if (v.getId() == extern.getId()) {
                 String docId = this.id.getText().toString();
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(v.getContext());
-                builderSingle.setTitle("Select external signer:-");
+                builderSingle.setTitle(context.getString(R.string.selectExternalSigner));
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.select_dialog_singlechoice);
                 for (int i = 0; i < externalSigners.length; i++) {
@@ -184,7 +185,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                         arrayAdapter.add(externalSigners[i].getName());
                     }
                 }
-                builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                builderSingle.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

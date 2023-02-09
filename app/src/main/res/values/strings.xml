@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Digital sign management</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">LIRA DSM</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -16,4 +16,17 @@
     <string name="all">All</string>
     <string name="active">Active</string>
     <string name="title_activity_old_sign">OldSign</string>
+    <string name="old_signature">Old Signature</string>
+    <string name="submit">Submit</string>
+    <string name="filter">Filter</string>
+    <string name="show_old">Show old</string>
+    <string name="clear">Clear</string>
+    <string name="creator">Creator</string>
+    <string name="date">Date</string>
+    <string name="self">Self</string>
+    <string name="extern">Extern</string>
+    <string name="selectExternalSigner">Select external signers:</string>
+    <string name="cancel">cancel</string>
+    <string name="scrollingTitle">Document list</string>
+    <string name="filterText">Select filter</string>
 </resources>
