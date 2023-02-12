@@ -1,8 +1,10 @@
 package com.example.digitalsignmanagement.ui.login;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -13,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -51,6 +54,10 @@ public class LoginActivity extends AppCompatActivity {
         eMailEditText.setText(Helper.retrieveLastUser(this));
         passwordEditText.setText("Password");
 
+        ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.MANAGE_EXTERNAL_STORAGE},
+                PackageManager.PERMISSION_GRANTED);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
