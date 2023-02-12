@@ -21,7 +21,7 @@ public final class Helper {
 
         String data = getPrefs(context).getString(key,"no_data_found");
         if (data == "no_data_found"){
-            data = "http://10.0.2.2:8080";
+            data = "http://3.121.0.175:8081";
             return data;
         }
         return data;}

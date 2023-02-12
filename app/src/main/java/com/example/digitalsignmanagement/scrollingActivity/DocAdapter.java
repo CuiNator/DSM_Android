@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -237,7 +238,8 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
                     OutputStream out = null;
                     try {
-                        out = new FileOutputStream("sdcard/Documents/temp.pdf",false);
+                        out = new FileOutputStream("storage/emulated/0/Documents/temp.pdf",false);
+                        //out = new FileOutputStream("sdcard/Documents/temp.pdf",false);
                         out.write(base64b);
                         out.close();
                     } catch (FileNotFoundException e) {
@@ -248,7 +250,8 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
                     StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                     StrictMode.setVmPolicy(builder.build());
-                    File file = new File("sdcard/Documents/temp.pdf");
+                    File file = new File("storage/emulated/0/Documents/temp.pdf");
+                    //File file = new File("sdcard/Documents/temp.pdf");
                     Intent target = new Intent(Intent.ACTION_VIEW);
                     target.setDataAndType(Uri.fromFile(file),"application/pdf");
                     target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:maxHeight="400px">
+    android:maxHeight="120dp">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -36,10 +37,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="76dp"
                 android:layout_marginTop="16dp"
-                android:text="Name"
-                android:maxLength="20"
                 android:ellipsize="end"
+                android:maxLength="20"
                 android:maxLines="1"
+                android:text="Name"
                 app:layout_constraintBottom_toTopOf="@+id/creator"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
