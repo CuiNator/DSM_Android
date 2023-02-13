@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintScrolling"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -13,7 +14,7 @@
         android:layout_height="0dp"
         android:fitsSystemWindows="true"
         android:theme="@style/Theme.DigitalSignManagement.AppBarOverlay"
-        app:layout_constraintBottom_toTopOf="@+id/pullToRefresh"
+        app:layout_constraintBottom_toTopOf="@+id/swipeToRefresh"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,6 +23,7 @@
             android:id="@+id/user"
             android:layout_width="match_parent"
             android:layout_height="24dp"
+            android:layout_marginRight="20dp"
             android:clickable="false"
             android:editable="false"
             android:ems="10"
@@ -66,13 +68,16 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/pullToRefresh"
+        android:id="@+id/swipeToRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"
+        android:layout_marginBottom="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/documents"

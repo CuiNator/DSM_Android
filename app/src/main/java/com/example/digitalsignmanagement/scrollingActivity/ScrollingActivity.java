@@ -1,5 +1,6 @@
 package com.example.digitalsignmanagement.scrollingActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -24,7 +25,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.digitalsignmanagement.Helper;
 import com.example.digitalsignmanagement.R;
-import com.example.digitalsignmanagement.ui.login.LoginActivity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
@@ -37,8 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 
 // Window which shows our RecyclerView
-public class ScrollingActivity extends AppCompatActivity implements View.OnClickListener {
-    SwipeRefreshLayout mSwipeRefreshLayout;
+public class ScrollingActivity extends AppCompatActivity implements View.OnClickListener{
     private RecyclerView sign;
     private String preferenceURL;
     TextView loggedUser;
@@ -48,11 +47,12 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     private Button filter;
     private String token;
     private SwipeRefreshLayout swipeContainer;
+    private String lastFilter ="active";
     @Override
     protected void onRestart() {
         super.onRestart();
         try {
-            getDocument(url,token,"active");
+            getDocument(url,token,lastFilter);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -60,6 +60,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_scrolling);
         preferenceURL = Helper.retrieveConnectionData(this, "url");
         String name = Helper.retrieveUserName(this);
         token = Helper.retrieveToken(this);
@@ -67,6 +68,28 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         url = preferenceURL + "/signers/" + id + "/documents";
         filter = (Button) findViewById(R.id.filter);
 
+        loggedUser = findViewById(R.id.user);
+        loggedUser.setText(name);
+
+        this.sign = (RecyclerView) findViewById(R.id.documents);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        this.sign.setLayoutManager(mLayoutManager);
+
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeToRefresh);
+        adapter = new DocAdapter(ScrollingActivity.this, documentList);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeContainer.setRefreshing(false);
+                try {
+                    getDocument(url, token, lastFilter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         //On activity start get only active documents
         try {
@@ -74,32 +97,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.pullToRefresh);
-
-        adapter = new DocAdapter(ScrollingActivity.this, documentList);
-
-//        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                swipeContainer.setRefreshing(false);
-//                try {
-//                    getDocument(url, token, "active");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-
-
-            setContentView(R.layout.activity_scrolling);
-            loggedUser = findViewById(R.id.user);
-            loggedUser.setText(name+"      ");
-
-            this.sign = (RecyclerView) findViewById(R.id.documents);
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-            this.sign.setLayoutManager(mLayoutManager);
-
-        }
+    }
 
 
 
@@ -166,17 +164,15 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
             public void onClick(DialogInterface dialog, int which) {
                 String strName = arrayAdapter.getItem(which);
 
-                    strName = strName.toLowerCase();
+                    lastFilter = strName.toLowerCase();
                     try {
-                        getDocument(url, token, strName);
+                        getDocument(url, token, lastFilter);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                Toast.makeText(getApplicationContext(), strName, Toast.LENGTH_LONG).show();
             }
         });
         builderSingle.setTitle(ScrollingActivity.this.getString(R.string.filterText));
         builderSingle.show();
     }
-
 }
