@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.MANAGE_EXTERNAL_STORAGE},
-                PackageManager.PERMISSION_GRANTED);
+                        PackageManager.PERMISSION_GRANTED);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

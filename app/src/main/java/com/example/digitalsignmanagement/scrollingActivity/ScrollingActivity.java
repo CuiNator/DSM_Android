@@ -48,11 +48,13 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
     private String token;
     private SwipeRefreshLayout swipeContainer;
     private String lastFilter ="active";
+    private int currentUserID= 0;
     @Override
     protected void onRestart() {
         super.onRestart();
         try {
             getDocument(url,token,lastFilter);
+            Helper.insertUserId(this, String.valueOf(currentUserID));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -65,6 +67,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
         String name = Helper.retrieveUserName(this);
         token = Helper.retrieveToken(this);
         String id = Helper.retrieveUserId(this);
+        currentUserID = Integer.parseInt(id);
         url = preferenceURL + "/signers/" + id + "/documents";
         filter = (Button) findViewById(R.id.filter);
 
@@ -98,9 +101,6 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
             e.printStackTrace();
         }
     }
-
-
-
 
     private void getDocument(String url,String token, String status) throws JSONException {
         //If "all" is selected the call uses the vanilla url which returns all documents

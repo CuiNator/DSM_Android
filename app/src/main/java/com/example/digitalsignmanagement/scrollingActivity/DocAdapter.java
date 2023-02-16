@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 //Adapter for the single objects in our RecyclerView
@@ -104,6 +105,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
         public Button filter;
         private String url;
 
+
         public ViewHolder(@NonNull View view) {
             super(view);
             this.view = view;
@@ -131,6 +133,13 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             status.setText(document.getStatus());
             String count = document.getReceivedSignatures() + "/" + document.getMaxSigns();
             gezeichnet.setText(count);
+
+            if (!Objects.equals(document.getStatus(), "ACTIVE")){
+                intern.setClickable(false);
+                intern.setAlpha(.5f);
+                extern.setClickable(false);
+                extern.setAlpha(.5f);
+            }
 
             if (document.isSelfSigned()){
                 intern.setClickable(false);
