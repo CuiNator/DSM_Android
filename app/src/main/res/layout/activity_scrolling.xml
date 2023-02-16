@@ -25,6 +25,8 @@
             android:layout_height="24dp"
             android:layout_marginRight="20dp"
             android:clickable="false"
+            android:drawableRight="@drawable/icons8_user_30"
+            android:drawableTint="#FFFFFF"
             android:editable="false"
             android:ems="10"
             android:enabled="true"
