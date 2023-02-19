@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 error.printStackTrace();
-                                Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Login failed, check connection and login data", Toast.LENGTH_SHORT).show();
                             }
                         });
                 queue.add(request);

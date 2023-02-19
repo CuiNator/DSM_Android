@@ -130,7 +130,7 @@ public class ScrollingActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Error retrieving Documents", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error retrieving documents", Toast.LENGTH_SHORT).show();
                     }
 
                 })

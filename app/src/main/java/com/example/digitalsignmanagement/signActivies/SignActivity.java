@@ -154,7 +154,7 @@ public class SignActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // error
                         error.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Signature already set", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error saving signature, please check connection", Toast.LENGTH_SHORT).show();
                     }
                 }
         ) {

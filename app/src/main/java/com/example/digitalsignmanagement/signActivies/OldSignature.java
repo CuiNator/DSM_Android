@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -83,7 +84,7 @@ public class OldSignature extends AppCompatActivity {
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 // error
-                                Log.d("Error.Response", error.toString());
+                                Toast.makeText(getApplicationContext(), "Error saving signature, please check connection", Toast.LENGTH_SHORT).show();
                             }
                         }
                 ) {
@@ -141,7 +142,7 @@ public class OldSignature extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Error retrieving signature, please check connection", Toast.LENGTH_SHORT).show();
                     }
 
                 }) {
