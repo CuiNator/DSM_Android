@@ -69,11 +69,14 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="215dp"
-        android:layout_height="147dp"
+        android:layout_width="255dp"
+        android:layout_height="192dp"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="123dp"
-        android:background="@drawable/lira_logo_nav"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/lira_logo_nav_edit"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
