@@ -186,6 +186,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
             //Loads the ExternalSigners array into a alert dialog and displays it
             if (v.getId() == extern.getId()) {
                 String docId = this.id.getText().toString();
+                String docName = this.name.getText().toString();
                 AlertDialog.Builder builderSingle = new AlertDialog.Builder(v.getContext());
                 builderSingle.setTitle(context.getString(R.string.selectExternalSigner));
 
@@ -213,7 +214,7 @@ public class DocAdapter extends RecyclerView.Adapter<DocAdapter.ViewHolder> {
                                 persId = String.valueOf(externalSigners[i].getPersonId());
                             }
                         }
-                        Helper.insertDocData(context, strName, docId);
+                        Helper.insertDocData(context,docName, docId);
                         Helper.insertUserId(context,persId);
                         Intent intent1 = new Intent(v.getContext(), SignActivity.class);
                         context.startActivity(intent1);
